@@ -1,0 +1,31 @@
+{
+  "conditions":
+  [
+    { "type": "minecraft:item_exists", "item": "enchanter_tools:chestplate_lapis_rune" }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "ccc",
+    "glg",
+    "ggg"
+  ],
+  "key":
+  {
+    "c": {
+      "item": "minecraft:clay_ball"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "l": {
+      "type": "forge:ore_dict",
+      "ore": "blockLapis"
+    }
+  },
+  "result":
+  {
+    "item": "enchanter_tools:chestplate_lapis_rune"
+  }
+}

@@ -1,0 +1,4 @@
+{
+    "parent": "item/generated",
+    "textures": { "layer0": "enchanter_tools:items/broken_eight_ball" }
+}

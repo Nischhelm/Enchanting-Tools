@@ -1,0 +1,39 @@
+{
+    "multipart": [
+        { "when": { "facing": "north" }, "apply": { "model": "enchanter_tools:chiseled_bookshelf" } },
+        { "when": { "facing": "south" }, "apply": { "model": "enchanter_tools:chiseled_bookshelf", "y": 180 } },
+        { "when": { "facing": "west"  }, "apply": { "model": "enchanter_tools:chiseled_bookshelf", "y": 270 } },
+        { "when": { "facing": "east"  }, "apply": { "model": "enchanter_tools:chiseled_bookshelf", "y": 90 } },
+
+        { "when": { "facing": "north", "book0": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book0" } },
+        { "when": { "facing": "south", "book0": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book0", "y": 180 } },
+        { "when": { "facing": "west",  "book0": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book0", "y": 270 } },
+        { "when": { "facing": "east",  "book0": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book0", "y": 90 } },
+
+        { "when": { "facing": "north", "book1": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book1" } },
+        { "when": { "facing": "south", "book1": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book1", "y": 180 } },
+        { "when": { "facing": "west",  "book1": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book1", "y": 270 } },
+        { "when": { "facing": "east",  "book1": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book1", "y": 90 } },
+
+        { "when": { "facing": "north", "book2": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book2" } },
+        { "when": { "facing": "south", "book2": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book2", "y": 180 } },
+        { "when": { "facing": "west",  "book2": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book2", "y": 270 } },
+        { "when": { "facing": "east",  "book2": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book2", "y": 90 } },
+
+        { "when": { "facing": "north", "book3": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book3" } },
+        { "when": { "facing": "south", "book3": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book3", "y": 180 } },
+        { "when": { "facing": "west",  "book3": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book3", "y": 270 } },
+        { "when": { "facing": "east",  "book3": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book3", "y": 90 } },
+
+        { "when": { "facing": "north", "book4": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book4" } },
+        { "when": { "facing": "south", "book4": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book4", "y": 180 } },
+        { "when": { "facing": "west",  "book4": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book4", "y": 270 } },
+        { "when": { "facing": "east",  "book4": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book4", "y": 90 } },
+
+        { "when": { "facing": "north", "book5": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book5" } },
+        { "when": { "facing": "south", "book5": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book5", "y": 180 } },
+        { "when": { "facing": "west",  "book5": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book5", "y": 270 } },
+        { "when": { "facing": "east",  "book5": true }, "apply": { "model": "enchanter_tools:chiseled_bookshelf_display/book5", "y": 90 } }
+
+    ]
+}

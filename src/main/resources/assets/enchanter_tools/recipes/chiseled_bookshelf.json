@@ -1,0 +1,28 @@
+{
+  "conditions":
+  [
+    { "type": "minecraft:item_exists", "item": "enchanter_tools:chiseled_bookshelf" }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "ppp",
+    "sss",
+    "ppp"
+  ],
+  "key":
+  {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "slabWood"
+    }
+  },
+  "result":
+  {
+    "item": "enchanter_tools:chiseled_bookshelf"
+  }
+}

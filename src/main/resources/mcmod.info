@@ -1,0 +1,17 @@
+[
+  {
+    "modid": "enchanter_tools",
+    "name": "Enchanter Tools",
+    "description": "Adds a utility block for creating Firework Stars easily. ",
+    "version": "1.0.0",
+    "mcversion": "${mcversion}",
+    "url": "modpage",
+    "authorList": [
+      "Sir Squidly"
+    ],
+    "credits": "The_Computerizer for their very nice Build template",
+    "logoFile": "assets/enchanter_tools/textures/gui/enchanter_tools_logo.png",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

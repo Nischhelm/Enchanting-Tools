@@ -1,0 +1,16 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "particle": "enchanter_tools:blocks/oak_chiseled_bookshelf_front_full"
+    },
+    "elements": [
+        {
+            "from": [11, 9, -0.025],
+            "to": [15, 14, -0.025],
+            "rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -0.1]},
+            "faces": {
+                "north": {"uv": [1, 2, 5, 7], "texture": "#particle"}
+            }
+        }
+    ]
+}

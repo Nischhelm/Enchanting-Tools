@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "flame=0": { "model": "enchanter_tools:arcane_brazier_unlit" },
+        "flame=1": { "model": "enchanter_tools:arcane_brazier_fire" },
+        "flame=2":  { "model": "enchanter_tools:arcane_brazier_base" }
+    }
+}

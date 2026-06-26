@@ -1,0 +1,28 @@
+{
+  "conditions":
+  [
+    { "type": "minecraft:item_exists", "item": "enchanter_tools:obsidian_burnisher" }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "  o",
+    " o ",
+    "q  "
+  ],
+  "key":
+  {
+    "o": {
+      "type": "forge:ore_dict",
+      "ore": "obsidian"
+    },
+    "q": {
+      "type": "forge:ore_dict",
+      "ore": "gemQuartz"
+    }
+  },
+  "result":
+  {
+    "item": "enchanter_tools:obsidian_burnisher"
+  }
+}

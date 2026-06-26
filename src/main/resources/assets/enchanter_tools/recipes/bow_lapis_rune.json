@@ -1,0 +1,34 @@
+{
+  "conditions":
+  [
+    { "type": "minecraft:item_exists", "item": "enchanter_tools:bow_lapis_rune" }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "cbc",
+    "glg",
+    " g "
+  ],
+  "key":
+  {
+    "c": {
+      "item": "minecraft:clay_ball"
+    },
+    "b": {
+      "item": "minecraft:bow"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "l": {
+      "type": "forge:ore_dict",
+      "ore": "blockLapis"
+    }
+  },
+  "result":
+  {
+    "item": "enchanter_tools:bow_lapis_rune"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "conditions":
+  [
+    { "type": "minecraft:item_exists", "item": "enchanter_tools:arcane_brazier" }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "nbn",
+    "ici",
+    "non"
+  ],
+  "key":
+  {
+    "n": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetIron"
+    },
+    "b": {
+      "item": "minecraft:blaze_powder"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "c": {
+      "item": "minecraft:coal", "data": 0
+    },
+    "o": {
+      "type": "forge:ore_dict",
+      "ore": "obsidian"
+    }
+  },
+  "result":
+  {
+    "item": "enchanter_tools:arcane_brazier"
+  }
+}

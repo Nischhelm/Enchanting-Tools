@@ -1,0 +1,95 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '6.0.+'
+    id 'wtf.gofancy.fancygradle' version '1.1.+'
+    id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
+    //id 'com.github.johnrengelman.shadow' version '8.1.+'
+}
+
+fancyGradle {
+    patches {
+        resources
+        coremods
+        asm
+        mergetool
+    }
+}
+
+version = "${project.mod_version}"
+group = project.maven_group
+archivesBaseName = project.mod_id
+
+java.toolchain.getLanguageVersion().set(JavaLanguageVersion.of(8))
+
+minecraft {
+    mappings channel: 'stable', version: mappings_version
+    runs {
+        def args = [
+                '-Dmixin.debug.export=true',
+                '-Dmixin.hotSwap=true',
+                '-Dmixin.checks.interfaces=true'
+        ]
+        client {
+            workingDirectory file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            property 'fml.coreMods.load', "${mod_plugin_class},${dependency_plugin_classes}"
+            jvmArgs args
+        }
+        server {
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            property 'fml.coreMods.load', "${mod_plugin_class},${dependency_plugin_classes}"
+            jvmArgs args
+        }
+    }
+}
+
+repositories {
+    maven { name = 'CurseForge'; url = uri('https://www.cursemaven.com'); content { includeGroup 'curse.maven' } }
+    maven { name = 'SpongePowered'; url = uri('https://repo.spongepowered.org/maven') }
+    maven { name = 'GitHub'; url = uri('https://jitpack.io') }
+}
+
+dependencies {
+    minecraft("net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}")
+
+    implementation "org.spongepowered:mixin:${mixin_version}"
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+
+    implementation("io.github.kostaskougios:cloning:${project.cloning_version}")
+
+    runtimeOnly(fg.deobf("curse.maven:caliper-266824:${project.caliper_version}"))
+    runtimeOnly(fg.deobf("curse.maven:had-enough-items-557549:${project.hei_version}"))
+}
+
+mixin {
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
+    config "mixins.${mod_id}.json"
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', minecraft_version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': minecraft_version
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    archiveBaseName = mod_id
+    manifest {
+        attributes([
+                'FMLCorePlugin': "${mod_plugin_class}",
+                // ALWAYS COMMENT OUT IN WORKSPACE, ALWAYS UNCOMMENT FOR BUILDS
+                //'FMLCorePluginContainsFMLMod': true,
+                'ForceLoadAsMod': true,
+                'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+                'MixinConfigs': "mixins.${mod_id}.json"
+        ])
+    }
+}

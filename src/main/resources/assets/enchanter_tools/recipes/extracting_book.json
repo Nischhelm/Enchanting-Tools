@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients":
+  [
+    { "item": "minecraft:writable_book" },
+    { "item": "minecraft:experience_bottle" },
+    { "item": "minecraft:diamond" }
+  ],
+  "result":
+  {
+    "item": "enchanter_tools:extracting_book"
+  }
+}

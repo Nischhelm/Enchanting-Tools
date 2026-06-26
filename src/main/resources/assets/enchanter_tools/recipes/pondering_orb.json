@@ -1,0 +1,35 @@
+{
+  "conditions":
+  [
+    { "type": "minecraft:item_exists", "item": "enchanter_tools:pondering_orb" }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "ege",
+    "glg",
+    "igi"
+  ],
+  "key":
+  {
+    "e": {
+      "item": "minecraft:experience_bottle"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "l": {
+      "type": "forge:ore_dict",
+      "ore": "blockLapis"
+    },
+    "i": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    }
+  },
+  "result":
+  {
+    "item": "enchanter_tools:pondering_orb"
+  }
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "enchanter_tools:block/arcane_brazier_base",
+     "textures": {
+        "flame": "enchanter_tools:blocks/arcane_brazier_normal_flame"
+    }
+}

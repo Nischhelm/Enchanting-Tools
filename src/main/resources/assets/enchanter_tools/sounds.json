@@ -1,0 +1,44 @@
+{
+	"block.arcane_brazier.use_item":
+	{
+		"category": "block",
+		"subtitle": "subtitles.enchanter_tools.block.arcane_brazier.use_item",
+		"sounds": [ "enchanter_tools:block/arcane_brazier/strip1", "enchanter_tools:block/arcane_brazier/strip2",
+			"enchanter_tools:block/arcane_brazier/strip3" ]
+	},
+	"block.chiseled_bookshelf.insert":
+	{
+		"category": "block",
+		"subtitle": "subtitles.enchanter_tools.block.chiseled_bookshelf.insert",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/insert1", "enchanter_tools:block/chiseled_bookshelf/insert2",
+			"enchanter_tools:block/chiseled_bookshelf/insert3", "enchanter_tools:block/chiseled_bookshelf/insert4" ]
+	},
+	"block.chiseled_bookshelf.insert_enchanted":
+	{
+		"category": "block",
+		"subtitle": "subtitles.enchanter_tools.block.chiseled_bookshelf.insert_enchanted",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/insert_enchanted1", "enchanter_tools:block/chiseled_bookshelf/insert_enchanted2",
+			"enchanter_tools:block/chiseled_bookshelf/insert_enchanted3", "enchanter_tools:block/chiseled_bookshelf/insert_enchanted4" ]
+	},
+	"block.chiseled_bookshelf.pickup":
+	{
+		"category": "block",
+		"subtitle": "subtitles.enchanter_tools.block.chiseled_bookshelf.pickup",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/pickup1", "enchanter_tools:block/chiseled_bookshelf/pickup2",
+			"enchanter_tools:block/chiseled_bookshelf/pickup3" ]
+	},
+	"block.chiseled_bookshelf.pickup_enchanted":
+	{
+		"category": "block",
+		"subtitle": "subtitles.enchanter_tools.block.chiseled_bookshelf.pickup_enchanted",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/pickup_enchanted1", "enchanter_tools:block/chiseled_bookshelf/pickup_enchanted2",
+			"enchanter_tools:block/chiseled_bookshelf/pickup_enchanted3" ]
+	},
+	"item.enchanted_eight_ball.use":
+	{
+		"category": "block",
+		"subtitle": "subtitles.enchanter_tools.item.enchanted_eight_ball.use",
+		"sounds": [ "enchanter_tools:item/enchanted_eight_ball/use1", "enchanter_tools:item/enchanted_eight_ball/use2",
+			"enchanter_tools:item/enchanted_eight_ball/use3", "enchanter_tools:item/enchanted_eight_ball/use4" ]
+	}
+}

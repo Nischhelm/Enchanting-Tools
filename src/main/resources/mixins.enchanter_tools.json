@@ -1,0 +1,11 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "package": "com.sirsquidly.enchanter_tools.mixin",
+  "refmap": "mixins.enchanter_tools.refmap.json",
+  "mixins": [
+    "MixinContainerEnchantment"
+  ],
+  "client": [
+    "MixinModelBiped"
+  ]
+}

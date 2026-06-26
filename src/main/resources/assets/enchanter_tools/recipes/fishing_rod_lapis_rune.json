@@ -1,0 +1,33 @@
+{
+  "conditions":
+  [
+    { "type": "minecraft:item_exists", "item": "enchanter_tools:fishing_rod_lapis_rune" }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "cfc",
+    "glg"
+  ],
+  "key":
+  {
+    "c": {
+      "item": "minecraft:clay_ball"
+    },
+    "f": {
+      "item": "minecraft:fishing_rod"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "l": {
+      "type": "forge:ore_dict",
+      "ore": "blockLapis"
+    }
+  },
+  "result":
+  {
+    "item": "enchanter_tools:fishing_rod_lapis_rune"
+  }
+}

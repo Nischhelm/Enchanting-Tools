@@ -1,0 +1,10 @@
+{
+    "parent": "item/generated",
+    "textures": { "layer0": "enchanter_tools:items/enchanted_eight_ball" },
+    "overrides": [
+        {
+            "predicate": { "damage": 1 },
+            "model": "enchanter_tools:item/broken_eight_ball"
+        }
+    ]
+}

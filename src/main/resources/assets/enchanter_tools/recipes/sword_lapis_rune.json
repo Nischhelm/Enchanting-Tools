@@ -1,0 +1,29 @@
+{
+  "conditions":
+  [
+    { "type": "minecraft:item_exists", "item": "enchanter_tools:sword_lapis_rune" }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern":
+  [
+    "cgc",
+    " l "
+  ],
+  "key":
+  {
+    "c": {
+      "item": "minecraft:clay_ball"
+    },
+    "g": {
+      "item": "minecraft:golden_sword"
+    },
+    "l": {
+      "type": "forge:ore_dict",
+      "ore": "blockLapis"
+    }
+  },
+  "result":
+  {
+    "item": "enchanter_tools:sword_lapis_rune"
+  }
+}
