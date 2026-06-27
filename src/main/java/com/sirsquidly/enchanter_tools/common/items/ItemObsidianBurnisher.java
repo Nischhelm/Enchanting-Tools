@@ -26,13 +26,6 @@ public class ItemObsidianBurnisher extends Item implements IAnvilSpecialBehavior
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
-    {
-        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.obsidian_burnisher.stats", ConfigCache.burnisherRepairCost));
-    }
-
-    @Override
     public void onAnvilUpdate(AnvilUpdateEvent event, ItemStack left, ItemStack right)
     {
         int leftRepairCost = left.getRepairCost();
@@ -45,19 +38,30 @@ public class ItemObsidianBurnisher extends Item implements IAnvilSpecialBehavior
         if (left.isItemStackDamageable()) newLeft.setItemDamage((int) Math.max(0, left.getItemDamage() + (left.getMaxDamage() * ConfigCache.burnisherDurabilityCost)));
 
         /* This is used for lowering Repair Cost using an inverse of the formula used to increase it. */
-        for (int i = 0; i < 4 && leftRepairCost > 0; i++)
+        if (ConfigCache.burnisherRepairCost < 0)
         {
-            leftRepairCost = (leftRepairCost - 1) / 2;
+            for (int i = 0; i < -ConfigCache.burnisherRepairCost && leftRepairCost > 0; i++)
+            {
+                leftRepairCost = (leftRepairCost - 1) / 2;
+            }
         }
 
-        newLeft.setRepairCost(Math.max(0, left.getRepairCost() + ConfigCache.burnisherRepairCost));
-
-        event.setOutput(newLeft);
         newLeft.setRepairCost(leftRepairCost);
+        event.setOutput(newLeft);
         event.setMaterialCost(1);
     }
 
     @Nullable
     @Override
     public ItemStack getAnvilRepairOutput(AnvilRepairEvent event, ContainerRepair container, EntityPlayer player, ItemStack left, ItemStack right) { return null; }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.label"));
+        tooltip.add(TextFormatting.GRAY + I18n.format(""));
+        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.effect"));
+        tooltip.add(TextFormatting.BLUE + I18n.format("description.enchanter_tools.obsidian_burnisher.stats", ConfigCache.burnisherRepairCost));
+    }
 }

@@ -100,4 +100,14 @@ public class ItemExtractingBook extends Item implements IAnvilSpecialBehavior
 
         return modified;
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.label"));
+        tooltip.add(TextFormatting.GRAY + I18n.format(""));
+        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.applies"));
+        tooltip.add(TextFormatting.BLUE + I18n.format("description.enchanter_tools.anvil_ingredient.enchanted_items"));
+    }
 }

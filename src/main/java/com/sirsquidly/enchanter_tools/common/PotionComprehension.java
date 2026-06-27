@@ -35,16 +35,12 @@ public class PotionComprehension extends Potion
         EntityPlayer player = event.getEntityPlayer();
         EntityXPOrb orb = event.getOrb();
 
-        if (player.isPotionActive(EnchanterToolsPotions.COMPREHENSION)) {
-
-
+        if (player.isPotionActive(EnchanterToolsPotions.COMPREHENSION))
+        {
             PotionEffect effect = player.getActivePotionEffect(EnchanterToolsPotions.COMPREHENSION);
             int amplifier = effect.getAmplifier();
-            System.out.println("Player Level is: " + amplifier);
-
 
             float multiplier = (1 + amplifier) * 1.5F;
-
             orb.xpValue = (int) (orb.xpValue * (multiplier));
         }
     }

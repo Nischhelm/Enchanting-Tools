@@ -1,5 +1,7 @@
 package com.sirsquidly.enchanter_tools.common.items;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -10,13 +12,15 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 
 public class ItemEnchantedInkwell extends Item implements IAnvilSpecialBehavior
@@ -66,5 +70,16 @@ public class ItemEnchantedInkwell extends Item implements IAnvilSpecialBehavior
         inkwell.damageItem(damage, player);
 
         return inkwell;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.label"));
+        tooltip.add(TextFormatting.GRAY + I18n.format(""));
+        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.applies"));
+        tooltip.add(TextFormatting.BLUE + I18n.format("description.enchanter_tools.anvil_ingredient.books"));
+        tooltip.add(TextFormatting.GRAY + I18n.format(""));
     }
 }

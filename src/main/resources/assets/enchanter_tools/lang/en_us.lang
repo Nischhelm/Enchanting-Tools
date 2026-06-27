@@ -1,4 +1,9 @@
-description.enchanter_tools.obsidian_burnisher.stats=%s Anvil Uses
+description.enchanter_tools.anvil_ingredient.label=Anvil Ingredient
+description.enchanter_tools.anvil_ingredient.applies=Applies to:
+description.enchanter_tools.anvil_ingredient.effect=Effect:
+description.enchanter_tools.anvil_ingredient.enchanted_items=   Enchanted Items
+description.enchanter_tools.anvil_ingredient.books=   Books
+description.enchanter_tools.obsidian_burnisher.stats=   %s Anvil Uses
 description.enchanter_tools.item.obsidian_burnisher_anvil=   %s Anvil Uses
 
 effect.enchanter_tools.comprehension.name=Comprehension
