@@ -35,7 +35,7 @@ public class EnchanterToolsBlocks
     /** Used for items settup here, and need to have models registered as such. */
     private static List<Item> blockDirectItemList = new ArrayList<Item>();
 
-    public static Block CHISELED_BOOKSHELF = new BlockChiseledBookshelf().setHardness(2.5F).setCreativeTab(CreativeTabs.DECORATIONS);
+    public static Block CHISELED_BOOKSHELF = new BlockChiseledBookshelf().setHardness(1.5F).setCreativeTab(CreativeTabs.DECORATIONS);
     public static Block PONDERING_ORB = new BlockPonderingOrb().setHardness(2.5F).setCreativeTab(CreativeTabs.DECORATIONS);
 
     public static Block ARCANE_BRAZIER = new BlockArcaneBrazier().setHardness(2.5F).setLightLevel(0.7F).setCreativeTab(CreativeTabs.DECORATIONS);

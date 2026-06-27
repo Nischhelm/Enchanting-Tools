@@ -49,7 +49,7 @@ public class BlockArcaneBrazier extends Block implements ITileEntityProvider
 
     public BlockArcaneBrazier()
     {
-        super(Material.GROUND, MapColor.GRAY);
+        super(Material.ROCK, MapColor.GRAY);
         setSoundType(SoundType.METAL);
     }
 

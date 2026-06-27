@@ -33,7 +33,7 @@ public class BlockPonderingOrb extends Block implements ITileEntityProvider
 
     public BlockPonderingOrb()
     {
-        super(Material.GROUND, MapColor.BLUE);
+        super(Material.ROCK, MapColor.BLUE);
         setSoundType(SoundType.GLASS);
     }
 
