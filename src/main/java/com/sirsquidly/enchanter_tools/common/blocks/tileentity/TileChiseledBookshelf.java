@@ -28,7 +28,6 @@ public class TileChiseledBookshelf extends TileEntity
         @Override
         public void setStackInSlot(int slot, @Nonnull ItemStack stack)
         {
-            System.out.print("Old Stack was: " + this.stacks.get(slot).copy());
             validateSlotIndex(slot);
 
             ItemStack oldStack = this.stacks.get(slot).copy();
@@ -49,10 +48,22 @@ public class TileChiseledBookshelf extends TileEntity
 
             this.stacks.set(slot, stack);
             onContentsChanged(slot);
+        }
 
-            setLastInteractedSlot(slot + 1);
-            markDirty();
-            if(world != null) world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+        @Override
+        protected void onContentsChanged(int slot)
+        {
+            super.onContentsChanged(slot);
+            if (world != null)
+            {
+                setLastInteractedSlot(slot + 1);
+                markDirty();
+                if (!world.isRemote)
+                {
+                    world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+                    world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock(), true);
+                }
+            }
         }
 
         /** ONLY allow inserting Books. */

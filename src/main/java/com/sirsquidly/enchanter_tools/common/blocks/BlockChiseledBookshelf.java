@@ -1,6 +1,7 @@
 package com.sirsquidly.enchanter_tools.common.blocks;
 
 import com.sirsquidly.enchanter_tools.common.blocks.tileentity.TileChiseledBookshelf;
+import com.sirsquidly.enchanter_tools.init.EnchanterToolsSounds;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -37,6 +38,7 @@ public class BlockChiseledBookshelf extends BlockContainer
     {
         super(Material.WOOD);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setSoundType(EnchanterToolsSounds.CHISELED_BOOKSHELF);
     }
 
     @Nullable

@@ -6,6 +6,29 @@
 		"sounds": [ "enchanter_tools:block/arcane_brazier/strip1", "enchanter_tools:block/arcane_brazier/strip2",
 			"enchanter_tools:block/arcane_brazier/strip3" ]
 	},
+	"block.chiseled_bookshelf.break":
+	{
+		"category": "block",
+		"subtitle": "subtitles.block.generic.break",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/break1", "enchanter_tools:block/chiseled_bookshelf/break2",
+			"enchanter_tools:block/chiseled_bookshelf/break3", "enchanter_tools:block/chiseled_bookshelf/break4",
+			",enchanter_tools:block/chiseled_bookshelf/break5", "enchanter_tools:block/chiseled_bookshelf/break6"]
+	},
+	"block.chiseled_bookshelf.fall":
+	{
+		"category": "block",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/step1", "enchanter_tools:block/chiseled_bookshelf/step",
+			"enchanter_tools:block/chiseled_bookshelf/step3", "enchanter_tools:block/chiseled_bookshelf/step4",
+			",enchanter_tools:block/chiseled_bookshelf/step5"]
+	},
+	"block.chiseled_bookshelf.hit":
+	{
+		"category": "block",
+		"subtitle": "subtitles.block.generic.hit",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/step1", "enchanter_tools:block/chiseled_bookshelf/step",
+			"enchanter_tools:block/chiseled_bookshelf/step3", "enchanter_tools:block/chiseled_bookshelf/step4",
+			",enchanter_tools:block/chiseled_bookshelf/step5"]
+	},
 	"block.chiseled_bookshelf.insert":
 	{
 		"category": "block",
@@ -33,6 +56,22 @@
 		"subtitle": "subtitles.enchanter_tools.block.chiseled_bookshelf.pickup_enchanted",
 		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/pickup_enchanted1", "enchanter_tools:block/chiseled_bookshelf/pickup_enchanted2",
 			"enchanter_tools:block/chiseled_bookshelf/pickup_enchanted3" ]
+	},
+	"block.chiseled_bookshelf.place":
+	{
+		"category": "block",
+		"subtitle": "subtitles.block.generic.place",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/break1", "enchanter_tools:block/chiseled_bookshelf/break2",
+			"enchanter_tools:block/chiseled_bookshelf/break3", "enchanter_tools:block/chiseled_bookshelf/break4",
+			",enchanter_tools:block/chiseled_bookshelf/break5", "enchanter_tools:block/chiseled_bookshelf/break6"]
+	},
+	"block.chiseled_bookshelf.step":
+	{
+		"category": "block",
+		"subtitle": "subtitles.block.generic.footsteps",
+		"sounds": [ "enchanter_tools:block/chiseled_bookshelf/step1", "enchanter_tools:block/chiseled_bookshelf/step",
+			"enchanter_tools:block/chiseled_bookshelf/step3", "enchanter_tools:block/chiseled_bookshelf/step4",
+			",enchanter_tools:block/chiseled_bookshelf/step5"]
 	},
 	"item.enchanted_eight_ball.use":
 	{
