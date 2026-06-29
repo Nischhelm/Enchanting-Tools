@@ -1,5 +1,6 @@
 package com.sirsquidly.enchanter_tools.common.items;
 
+import com.sirsquidly.enchanter_tools.common.CommonEvents;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
@@ -57,19 +58,26 @@ public class ItemEnchantedInkwell extends Item implements IAnvilSpecialBehavior
         enchants.forEach((ench, lvl) -> ItemEnchantedBook.addEnchantment(book, new EnchantmentData(ench, lvl)));
 
         event.setOutput(book);
-        event.setCost(Math.max(1, enchants.size() * 2));
-        event.setMaterialCost(1);
+
+        int cost = 0;
+
+        for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet())
+        { cost += ((10 / entry.getKey().getRarity().getWeight()) + 3) * entry.getValue(); }
+
+        event.setCost(cost);
     }
 
     @Nullable
     @Override
-    public ItemStack getAnvilRepairOutput(AnvilRepairEvent event, ContainerRepair container, EntityPlayer player, ItemStack left, ItemStack right)
+    public CommonEvents.AnvilRefresherStorage getAnvilRepairOutput(AnvilRepairEvent event, ContainerRepair container, EntityPlayer player, ItemStack left, ItemStack right)
     {
+        ItemStack books = left.copy();
+        books.shrink(1);
         ItemStack inkwell = right.copy();
-        int damage = EnchantmentHelper.getEnchantments(right).size();
-        inkwell.damageItem(damage, player);
+        //int damage = EnchantmentHelper.getEnchantments(right).size();
+        //inkwell.damageItem(damage, player);
 
-        return inkwell;
+        return new CommonEvents.AnvilRefresherStorage(container, books, inkwell);
     }
 
     @Override

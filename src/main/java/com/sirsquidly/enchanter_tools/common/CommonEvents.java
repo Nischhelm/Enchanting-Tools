@@ -29,15 +29,18 @@ import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * WHY IS THE ANVIL SO FUCKING HARD CODED GAAAAAAHHHHHHHH FORRRGE
+ * */
 @Mod.EventBusSubscriber
 public class CommonEvents
 {
-    public static final Map<UUID, Pair<ContainerRepair, ItemStack>> anvilRefreshers = new HashMap<>();
+    public static final Map<UUID, AnvilRefresherStorage> anvilRefreshers = new HashMap<>();
 
     /** This first is used for setting up the Output properly. */
     @SubscribeEvent
@@ -67,10 +70,9 @@ public class CommonEvents
         if (left.isEmpty() || right.isEmpty()) return;
         if (!(right.getItem() instanceof IAnvilSpecialBehavior)) return;
 
-        ItemStack output = ((IAnvilSpecialBehavior) right.getItem()).getAnvilRepairOutput(event, container, player, left, right);
+        AnvilRefresherStorage storage = ((IAnvilSpecialBehavior) right.getItem()).getAnvilRepairOutput(event, container, player, left, right);
 
-        if (output != null && !output.isEmpty())
-        { anvilRefreshers.put(player.getUniqueID(), Pair.of(container, output)); }
+        if (storage != null) anvilRefreshers.put(player.getUniqueID(), storage);
     }
 
     @SubscribeEvent
@@ -78,11 +80,16 @@ public class CommonEvents
     {
         if (event.phase != TickEvent.Phase.END) return;
 
-        Pair<ContainerRepair, ItemStack> pair = anvilRefreshers.remove(event.player.getUniqueID());
-        if (pair == null || event.player.openContainer != pair.getLeft()) return;
+        AnvilRefresherStorage storage = anvilRefreshers.get(event.player.getUniqueID());
+        if (storage == null || event.player.openContainer != storage.container) return;
+        anvilRefreshers.remove(event.player.getUniqueID());
 
-        pair.getLeft().putStackInSlot(0, pair.getRight());
-        pair.getLeft().detectAndSendChanges();
+        if (storage.left != null)
+        { storage.container.putStackInSlot(0, storage.left); }
+        if (storage.right != null)
+        { storage.container.putStackInSlot(1, storage.right); }
+
+        storage.container.detectAndSendChanges();
     }
 
     /** This is a backup in case the Player breaks the anvil when using any item. */
@@ -91,17 +98,36 @@ public class CommonEvents
     {
         if (!(event.getContainer() instanceof ContainerRepair)) return;
 
-        Pair<ContainerRepair, ItemStack> pair = anvilRefreshers.remove(event.getEntityPlayer().getUniqueID());
-        if (pair == null) return;
+        AnvilRefresherStorage storage = anvilRefreshers.remove(event.getEntityPlayer().getUniqueID());
+        if (storage == null) return;
 
-        ItemStack stack = pair.getRight();
-        if (stack.isEmpty()) return;
+        if (storage.left != null)
+        {
+            if (!event.getEntityPlayer().inventory.addItemStackToInventory(storage.left))
+            { event.getEntityPlayer().dropItem(storage.left, false); }
+        }
 
-        if (!event.getEntityPlayer().inventory.addItemStackToInventory(stack))
-        { event.getEntityPlayer().dropItem(stack, false); }
+        if (storage.right != null)
+        {
+            if (!event.getEntityPlayer().inventory.addItemStackToInventory(storage.right))
+            { event.getEntityPlayer().dropItem(storage.right, false); }
+        }
     }
 
+    /** This stores the Anvil's slot items, because the normal anvil is STUPIDLY INCONSISTENT with it. */
+    public static class AnvilRefresherStorage
+    {
+        public final ContainerRepair container;
+        @Nullable public final ItemStack left;
+        @Nullable public final ItemStack right;
 
+        public AnvilRefresherStorage(ContainerRepair container, @Nullable ItemStack left, @Nullable ItemStack right)
+        {
+            this.container = container;
+            this.left = left;
+            this.right = right;
+        }
+    }
 
     @SubscribeEvent
     public static void onProjectileImpact(ProjectileImpactEvent event)

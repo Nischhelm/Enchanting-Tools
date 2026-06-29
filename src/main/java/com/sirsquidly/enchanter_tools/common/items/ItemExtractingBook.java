@@ -1,5 +1,6 @@
 package com.sirsquidly.enchanter_tools.common.items;
 
+import com.sirsquidly.enchanter_tools.common.CommonEvents;
 import com.sirsquidly.enchanter_tools.config.ConfigCache;
 import com.sirsquidly.enchanter_tools.config.ConfigParser;
 import net.minecraft.client.resources.I18n;
@@ -72,7 +73,7 @@ public class ItemExtractingBook extends Item implements IAnvilSpecialBehavior
 
     @Nullable
     @Override
-    public ItemStack getAnvilRepairOutput(AnvilRepairEvent event, ContainerRepair container, EntityPlayer player, ItemStack left, ItemStack right)
+    public CommonEvents.AnvilRefresherStorage getAnvilRepairOutput(AnvilRepairEvent event, ContainerRepair container, EntityPlayer player, ItemStack left, ItemStack right)
     {
         /* Early exit if the config states the Extracting Book should leave this item alone. */
         if (ConfigParser.isStackInList(left, ConfigCache.extractBookExtractItemBlacklist)) return null;
@@ -91,6 +92,7 @@ public class ItemExtractingBook extends Item implements IAnvilSpecialBehavior
             if (enchId == null || ConfigCache.extractBookExtractEnchantBlacklist.contains(enchId.toString())) continue;
 
             removedEnchant = ench;
+            break;
         }
         if (removedEnchant == null) return null;
 
@@ -98,7 +100,7 @@ public class ItemExtractingBook extends Item implements IAnvilSpecialBehavior
         ItemStack modified = left.copy();
         EnchantmentHelper.setEnchantments(newMap, modified);
 
-        return modified;
+        return new CommonEvents.AnvilRefresherStorage(container, modified, ItemStack.EMPTY);
     }
 
     @Override

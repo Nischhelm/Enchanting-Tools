@@ -1,5 +1,6 @@
 package com.sirsquidly.enchanter_tools.common.items;
 
+import com.sirsquidly.enchanter_tools.common.CommonEvents;
 import com.sirsquidly.enchanter_tools.config.ConfigCache;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -53,7 +54,7 @@ public class ItemObsidianBurnisher extends Item implements IAnvilSpecialBehavior
 
     @Nullable
     @Override
-    public ItemStack getAnvilRepairOutput(AnvilRepairEvent event, ContainerRepair container, EntityPlayer player, ItemStack left, ItemStack right) { return null; }
+    public CommonEvents.AnvilRefresherStorage getAnvilRepairOutput(AnvilRepairEvent event, ContainerRepair container, EntityPlayer player, ItemStack left, ItemStack right) { return null; }
 
     @Override
     @SideOnly(Side.CLIENT)
