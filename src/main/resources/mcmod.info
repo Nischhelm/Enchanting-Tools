@@ -2,10 +2,10 @@
   {
     "modid": "enchanter_tools",
     "name": "Enchanter Tools",
-    "description": "Adds a utility block for creating Firework Stars easily. ",
+    "description": "Adds many new magical tools, treasures, and utlities to expand Minecraft's enchanting system.",
     "version": "1.0.0",
     "mcversion": "${mcversion}",
-    "url": "modpage",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/enchanter-tools",
     "authorList": [
       "Sir Squidly"
     ],
