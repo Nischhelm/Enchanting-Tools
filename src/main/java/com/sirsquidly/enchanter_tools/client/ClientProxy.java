@@ -44,8 +44,8 @@ public class ClientProxy extends CommonProxy
             case BRAZIER_SMOKE: return new ParticleBrazierSmoke.Factory();
             case BRAZIER_EMBER: return new ParticleBrazierEmber.Factory();
             case BRAZIER_FLAME_FADE: return new ParticleBrazierFlame.Factory();
-            default:
-            case BRAZIER_RUNE_BURN: return new ParticleGlyphBurn.Factory();
+            case BRAZIER_RUNE_BURN:
+            default: return new ParticleGlyphBurn.Factory();
         }
     }
 }

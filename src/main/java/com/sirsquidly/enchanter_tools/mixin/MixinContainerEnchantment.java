@@ -24,11 +24,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.swing.*;
 import java.util.*;
 
 @Mixin(ContainerEnchantment.class)
@@ -54,7 +52,7 @@ public abstract class MixinContainerEnchantment
     private void enchantertools$fixPreview(IInventory inv, CallbackInfo ci)
     {
         ItemStack item = this.tableInventory.getStackInSlot(0);
-        if (item.isEmpty() || item.getItem() != Items.BOOK) return;
+        if (item.isEmpty() || (item.getItem() != Items.BOOK)) return;
         ItemStack runeStack = this.tableInventory.getStackInSlot(1);
         if (!(runeStack.getItem() instanceof ItemLapisRune)) return;
         ItemLapisRune.RuneType rune = ((ItemLapisRune) runeStack.getItem()).getRuneType();
@@ -143,12 +141,12 @@ public abstract class MixinContainerEnchantment
 
         for (int attempt = 1; attempt <= 16; attempt++)
         {
-            this.rand.setSeed((long)(this.xpSeed + enchantSlot + attempt * 31));
+            this.rand.setSeed((this.xpSeed + enchantSlot + attempt * 31));
 
             List<EnchantmentData> reroll = EnchantmentHelper.buildEnchantmentList(this.rand, stack, level, false);
             if (reroll == null || reroll.isEmpty()) continue;
 
-            reroll.removeIf(e -> blocked.contains(e.enchantment));
+            reroll.removeIf(e -> blocked.contains(e.enchantment.getRegistryName()));
 
             if (!reroll.isEmpty())
             {

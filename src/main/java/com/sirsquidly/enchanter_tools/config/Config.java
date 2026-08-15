@@ -41,13 +41,15 @@ public class Config
             @net.minecraftforge.common.config.Config.Comment("Enable the Arcane Brazier.")
             public boolean enable = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
+            @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.arcane_brazier.collisionDamage")
+            @net.minecraftforge.common.config.Config.Comment("Colliding with a lit brazier will cause damage.")
+            public boolean collisionDamage = true;
+
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.arcane_brazier.durabilityCost")
             @net.minecraftforge.common.config.Config.Comment("How much Durability an item loses when an enchantment is stripped via the Arcane Brazier. Converted to a percent of the item's Max Durability. ")
             @net.minecraftforge.common.config.Config.RangeDouble(min = -1, max = 1)
             public double durabilityCost = 0.05D;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.arcane_brazier.burningEnchantBlacklist")
             @net.minecraftforge.common.config.Config.Comment("A list of enchantments that cannot be set into the Brazier. This does not prevent existing braziers from removing it still.")
             public String[] burningEnchantBlacklist =
@@ -56,7 +58,6 @@ public class Config
                             "minecraft:vanishing_curse"
                     };
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.arcane_brazier.burningItemBlacklist")
             @net.minecraftforge.common.config.Config.Comment("A list of items the Arcane Brazier cannot strip Enchantments from.")
             public String[] burningItemBlacklist =
@@ -71,7 +72,6 @@ public class Config
 
         public static class configChiseledBookshelf
         {
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.chiseledBookshelf.acceptedBooks")
             @net.minecraftforge.common.config.Config.Comment("Books that can be placed into the Chiseled Bookshelf.")
             public String[] acceptedBooks =
@@ -90,24 +90,28 @@ public class Config
                             "harkenscythe:shadow_book",
                             "harkenscythe:refresh_tome",
                             "harkenscythe:reaper_guidebook",
-                            "quark:ancient_tome",
-                            "villagenames:villagebook",
-                            "villagenames:mineshaftbook",
-                            "villagenames:jungletemplebook",
-                            "villagenames:desertpyramidbook",
-                            "villagenames:swamphutbook",
-                            "villagenames:igloobook",
-                            "villagenames:templebook",
-                            "villagenames:strongholdbook",
-                            "villagenames:monumentbook",
-                            "villagenames:mansionbook",
-                            "villagenames:fortressbook",
-                            "villagenames:endcitybook",
-                            "villagenames:moonvillagebook",
-                            "villagenames:koentusvillagebook",
-                            "villagenames:fronosvillagebook",
-                            "villagenames:nibiruvillagebook",
-                            "villagenames:abandonedbasebook"
+                            "quark:ancient_tome"
+                    };
+
+            @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.chiseledBookshelf.acceptedNames")
+            @net.minecraftforge.common.config.Config.Comment("Item Ids that contain these words can be placed into the Chiseled Bookshelf.")
+            public String[] acceptedNames = new String[]
+                    {
+                            "book",
+                            "tome",
+                            "lexicon",
+                            "nomicon",
+                            "manual",
+                            "knowledge",
+                            "pedia",
+                            "compendium",
+                            "guide",
+                            "codex",
+                            "dictionary",
+                            "journal",
+                            "tablet",
+                            "grimoire",
+                            "bestiary"
                     };
 
             @net.minecraftforge.common.config.Config.RequiresMcRestart
@@ -128,25 +132,30 @@ public class Config
             @net.minecraftforge.common.config.Config.Comment("Enable the Pondering Orb.")
             public boolean enable = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.pondering_orb.ponderingExperience")
             @net.minecraftforge.common.config.Config.Comment("How much XP is given by pondering the orb. Setting to 0 disables any free XP.")
             @net.minecraftforge.common.config.Config.RangeInt(min = 0, max = 10000)
             public int ponderingExperience = 1;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
+            @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.pondering_orb.ponderingRange")
+            @net.minecraftforge.common.config.Config.Comment("The maximum distance from the pondering orb the player can be to receive free XP.")
+            @net.minecraftforge.common.config.Config.RangeInt(min = 0, max = 16)
+            public int ponderingRange = 8;
+
+            @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.pondering_orb.ponderingRequiresLook")
+            @net.minecraftforge.common.config.Config.Comment("Free XP requires the player to be looking directly at the Pondering Orb.")
+            public boolean ponderingRequiresLook = true;
+
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.pondering_orb.ponderingTimer")
             @net.minecraftforge.common.config.Config.Comment("How long (in seconds) the orb checks for pondering players.")
             @net.minecraftforge.common.config.Config.RangeInt(min = 0, max = 9999)
             public int ponderingTimer = 5;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.pondering_orb.orbRerollXPCost")
             @net.minecraftforge.common.config.Config.Comment("How many Levels are spent to re-roll the Enchanting Table using the Pondering Orb.")
             @net.minecraftforge.common.config.Config.RangeInt(min = 0, max = 10000)
             public int orbRerollXPCost = 0;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.block.pondering_orb.orbRerollTickCooldown")
             @net.minecraftforge.common.config.Config.Comment("How long (in ticks) the cooldown for Enchanting Table re-rolls is.")
             @net.minecraftforge.common.config.Config.RangeInt(min = -1, max = 999999)
@@ -171,7 +180,6 @@ public class Config
             @net.minecraftforge.common.config.Config.Comment("Enable the Extracting Book.")
             public boolean enable = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.extractingBook.extractEnchantBlacklist")
             @net.minecraftforge.common.config.Config.Comment("A list of enchantments that cannot be extracted via the Extracting Book.")
             public String[] extractEnchantBlacklist =
@@ -180,7 +188,6 @@ public class Config
                             "minecraft:vanishing_curse"
                     };
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.extractingBook.extractItemBlacklist")
             @net.minecraftforge.common.config.Config.Comment("A list of items the Extracting Book cannot pull Enchantments from.")
             public String[] extractItemBlacklist =
@@ -200,12 +207,10 @@ public class Config
             @net.minecraftforge.common.config.Config.Comment("Enable the Enchanted 8 Ball.")
             public boolean enable = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.enchantedEightBall.enchantedDivination")
             @net.minecraftforge.common.config.Config.Comment("Sets fortune-telling to be exclusive to an 8 Ball that is Enchanted.")
             public boolean enchantedDivination = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.enchantedEightBall.eight_ball_lootTables")
             @net.minecraftforge.common.config.Config.Comment("Loot Tables the Enchanted 8 Ball will be injected into. Non-replacing.")
             public String[] eight_ball_lootTables =
@@ -230,7 +235,6 @@ public class Config
             @net.minecraftforge.common.config.Config.Comment("Enable the Enchanted Inkwell.")
             public boolean enable = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.enchantedInkwell.inkwell_lootTables")
             @net.minecraftforge.common.config.Config.Comment("Loot Tables the Enchanted Inkwell will be injected into. Non-replacing.")
             public String[] inkwell_lootTables =
@@ -270,7 +274,6 @@ public class Config
         {
             @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.lapisRune.runeTypes")
-
             @net.minecraftforge.common.config.Config.Comment({
                     "Registers Lapis Rune Types.",
                     "Formatted as \"[Name]-[Item]-[Level Requirement Multiplier]-[Cost Multiplier]-[Whitelisted Enchantment];[Whitelisted Enchantment]...-[Blacklisted Enchantment];[Blacklisted Enchantment]...\"",
@@ -306,17 +309,32 @@ public class Config
             @net.minecraftforge.common.config.Config.Comment("Enable the Obsidian Burnisher.")
             public boolean enable = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.obsidianBurnisher.durabilityCost")
             @net.minecraftforge.common.config.Config.Comment("How much Durability the targeted item loses when the Burnisher is used on it. Converted to a percent of the item's Max Durability. ")
             @net.minecraftforge.common.config.Config.RangeDouble(min = -1, max = 1)
             public double durabilityCost = 0.1D;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.obsidianBurnisher.repairCostAltering")
             @net.minecraftforge.common.config.Config.Comment("How much Repair Cost is removed by using the Burnisher.")
             @net.minecraftforge.common.config.Config.RangeInt(min = -100, max = 100)
             public int repairCostAltering = -2;
+
+            @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.item.obsidianBurnisher.tooltipVisibility")
+            @net.minecraftforge.common.config.Config.Comment({
+                    "Determines when the 'Anvil Uses' tooltip will appear on valid items while the obsidian Burnisher is in the player's inventory.",
+                    "ALWAYS: The tooltip will always display",
+                    "SHIFT: The tooltip will only display when the shift key is held",
+                    "ANVIL: The tooltip will only display when ",
+                    "DISABLED: The tooltip will never display"
+            })
+            public TooltipVisibility tooltipVisibility = TooltipVisibility.SHIFT;
+
+            public enum TooltipVisibility {
+                ALWAYS,
+                SHIFT,
+                ANVIL,
+                DISABLED
+            }
         }
     }
 
@@ -337,18 +355,15 @@ public class Config
             @net.minecraftforge.common.config.Config.Comment("Enable the Comprehension effect.")
             public boolean enable = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.potion_effects.comprehension.bossesAreBlacklisted")
             @net.minecraftforge.common.config.Config.Comment("Makes any mob set as a boss immune to Comprehension.")
             public boolean bossesAreBlacklisted = true;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.potion_effects.comprehension.grantedByBottleOEnchanting")
             @net.minecraftforge.common.config.Config.Comment("How long Comprehension is given (in ticks) to mobs near a Bottle O' Enchanting's impact. -1 Disables this.")
             @net.minecraftforge.common.config.Config.RangeInt(min = -1)
             public int grantedByBottleOEnchanting = 3000;
 
-            @net.minecraftforge.common.config.Config.RequiresMcRestart
             @net.minecraftforge.common.config.Config.LangKey("config.enchanter_tools.potion_effects.comprehension.entityBlacklist")
             @net.minecraftforge.common.config.Config.Comment("A list of entities that are immune to Comprehension.")
             public String[] entityBlacklist =
@@ -365,7 +380,10 @@ public class Config
         public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
         {
             if(event.getModID().equals(enchanterTools.MOD_ID))
-            { ConfigManager.sync(enchanterTools.MOD_ID, net.minecraftforge.common.config.Config.Type.INSTANCE); }
+            {
+                ConfigManager.sync(enchanterTools.MOD_ID, net.minecraftforge.common.config.Config.Type.INSTANCE);
+                ConfigParser.breakupConfigArrays();
+            }
         }
     }
 }

@@ -1,18 +1,21 @@
 package com.sirsquidly.enchanter_tools.client;
 
 import com.sirsquidly.enchanter_tools.common.blocks.BlockChiseledBookshelf;
+import com.sirsquidly.enchanter_tools.common.blocks.tileentity.TileArcaneBrazier;
 import com.sirsquidly.enchanter_tools.common.blocks.tileentity.TileChiseledBookshelf;
-import com.sirsquidly.enchanter_tools.config.ConfigCache;
+import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.init.EnchanterToolsItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -45,65 +48,86 @@ public class ClientEvents
         Vec3d lookVector = player.getLook(1.0F);
         double playerReach = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
         Vec3d traceEnd = eyePosition.add(lookVector.x * playerReach, lookVector.y * playerReach, lookVector.z * playerReach);
-        RayTraceResult rtresult = mc.player.getEntityWorld().rayTraceBlocks(eyePosition, traceEnd, false, true, false);;
+        RayTraceResult rtresult = mc.player.getEntityWorld().rayTraceBlocks(eyePosition, traceEnd, false, true, false);
         if (rtresult == null || rtresult.typeOfHit != RayTraceResult.Type.BLOCK) return;
 
         TileEntity tile = mc.world.getTileEntity(rtresult.getBlockPos());
 
         if (tile instanceof TileChiseledBookshelf)
         {
-            TileChiseledBookshelf bookshelf = (TileChiseledBookshelf)tile;
-            IBlockState state = mc.world.getBlockState(rtresult.getBlockPos());
-            EnumFacing facing = state.getValue(BlockChiseledBookshelf.FACING);
-            if (rtresult.sideHit != facing) return;
+            renderBookshelfInfo(mc, rtresult, (TileChiseledBookshelf) tile);
+        } else if (tile instanceof TileArcaneBrazier) {
+            renderBrazierInfo(mc, rtresult, (TileArcaneBrazier) tile);
+        }
+    }
 
-            Vec3d hitVec = rtresult.hitVec.subtract(rtresult.getBlockPos().getX(), rtresult.getBlockPos().getY(), rtresult.getBlockPos().getZ());
-            int slot = TileChiseledBookshelf.getSlotFromHit(facing, (float)hitVec.x, (float)hitVec.y, (float)hitVec.z);
-            ItemStack stack = bookshelf.inventory.getStackInSlot(slot);
-            if (stack.isEmpty()) return;
+    private static void renderBookshelfInfo(Minecraft mc, RayTraceResult rtresult, TileChiseledBookshelf bookshelf)
+    {
+        IBlockState state = mc.world.getBlockState(rtresult.getBlockPos());
+        EnumFacing facing = state.getValue(BlockChiseledBookshelf.FACING);
+        if (rtresult.sideHit != facing) return;
 
-            ScaledResolution res = new ScaledResolution(mc);
-            int maxWidth = res.getScaledWidth() - 20;
-            int centerX = res.getScaledWidth() / 2;
-            int centerY = res.getScaledHeight() / 2 + 14;
+        Vec3d hitVec = rtresult.hitVec.subtract(rtresult.getBlockPos().getX(), rtresult.getBlockPos().getY(), rtresult.getBlockPos().getZ());
+        int slot = TileChiseledBookshelf.getSlotFromHit(facing, (float)hitVec.x, (float)hitVec.y, (float)hitVec.z);
+        ItemStack stack = bookshelf.inventory.getStackInSlot(slot);
+        if (stack.isEmpty()) return;
 
-            List<String> lines = stack.getTooltip(mc.player, ITooltipFlag.TooltipFlags.NORMAL);
+        ScaledResolution res = new ScaledResolution(mc);
+        int maxWidth = res.getScaledWidth() - 20;
+        int centerX = res.getScaledWidth() / 2;
+        int centerY = res.getScaledHeight() / 2 + 14;
 
-            int yOffset = 0;
+        List<String> lines = stack.getTooltip(mc.player, ITooltipFlag.TooltipFlags.NORMAL);
 
-            for (int i = 0; i < lines.size(); i++)
+        int yOffset = 0;
+
+        for (int i = 0; i < lines.size(); i++)
+        {
+            String line = lines.get(i);
+            TextFormatting textColor = i == 0 ? stack.getItem().getForgeRarity(stack).getColor() : TextFormatting.GRAY;
+            List<String> wrapped = mc.fontRenderer.listFormattedStringToWidth( textColor + line, maxWidth);
+
+            for (String wrappedLine : wrapped)
             {
-                String line = lines.get(i);
-                TextFormatting textColor = i == 0 ? stack.getItem().getForgeRarity(stack).getColor() : TextFormatting.GRAY;
-                List<String> wrapped = mc.fontRenderer.listFormattedStringToWidth( textColor + line, maxWidth);
-
-                for (String wrappedLine : wrapped)
-                {
-                    int width = mc.fontRenderer.getStringWidth(wrappedLine);
-                    mc.fontRenderer.drawStringWithShadow( wrappedLine, centerX - width / 2, centerY + yOffset, -1);
-                    yOffset += 10;
-                }
+                int width = mc.fontRenderer.getStringWidth(wrappedLine);
+                mc.fontRenderer.drawStringWithShadow( wrappedLine, centerX - width / 2f, centerY + yOffset, -1);
+                yOffset += 10;
             }
         }
     }
 
+    private static void renderBrazierInfo(Minecraft mc, RayTraceResult rtresult, TileArcaneBrazier brazier)
+    {
+        Enchantment enchantment = brazier.getSavedEnchantment();
+        if (enchantment == null) return;
 
+        ScaledResolution res = new ScaledResolution(mc);
+        int maxWidth = res.getScaledWidth() - 20;
+        int centerX = res.getScaledWidth() / 2;
+        int centerY = res.getScaledHeight() / 2 + 14;
+
+        int yOffset = 0;
+
+        String name = I18n.format(enchantment.getName());
+        List<String> wrapped = mc.fontRenderer.listFormattedStringToWidth( TextFormatting.DARK_PURPLE + name, maxWidth);
+
+        for (String wrappedLine : wrapped)
+        {
+            int width = mc.fontRenderer.getStringWidth(wrappedLine);
+            mc.fontRenderer.drawStringWithShadow( wrappedLine, centerX - width / 2f, centerY + yOffset, -1);
+            yOffset += 10;
+        }
+    }
 
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event)
     {
         EntityPlayer player = event.getEntityPlayer();
-        if (player == null) return;
-
-        if (!hasBurnisher(player)) return;
-
         ItemStack stack = event.getItemStack();
-        if (stack.isEmpty()) return;
-
-        int repairCost = stack.getRepairCost();
-        if (repairCost <= 0) return;
+        if (!shouldRenderBurnisherTooltip(player, stack)) return;
 
         List<String> tooltip = event.getToolTip();
+        int repairCost = stack.getRepairCost();
 
         String line = I18n.format("description.enchanter_tools.item.obsidian_burnisher_anvil", getAnvilUses(repairCost));
 
@@ -114,15 +138,10 @@ public class ClientEvents
     @SubscribeEvent
     public static void onRenderTooltip(RenderTooltipEvent.PostText event)
     {
-        ItemStack stack = event.getStack();
-        if (stack.isEmpty()) return;
-
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayer player = mc.player;
-        if (player == null) return;
-
-        if (!hasBurnisher(player)) return;
-        if (stack.getRepairCost() <= 0) return;
+        ItemStack stack = event.getStack();
+        if (!shouldRenderBurnisherTooltip(player, stack)) return;
 
         List<String> lines = event.getLines();
         if (lines.isEmpty()) return;
@@ -154,6 +173,26 @@ public class ClientEvents
 
         RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
+    }
+
+    private static boolean shouldRenderBurnisherTooltip(EntityPlayer player, ItemStack stack)
+    {
+        if (player == null) return false;
+        if (stack.isEmpty()) return false;
+        if (stack.getRepairCost() <= 0) return false;
+
+        switch (Config.item.obsidianBurnisher.tooltipVisibility)
+        {
+            case ALWAYS:
+                return hasBurnisher(player);
+            case SHIFT:
+                return GuiScreen.isShiftKeyDown() && hasBurnisher(player);
+            case ANVIL:
+                return player.openContainer instanceof ContainerRepair && hasBurnisher(player);
+            case DISABLED:
+            default:
+                return false;
+        }
     }
 
     private static boolean hasBurnisher(EntityPlayer player)

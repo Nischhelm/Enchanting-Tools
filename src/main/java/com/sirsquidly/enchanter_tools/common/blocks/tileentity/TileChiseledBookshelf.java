@@ -84,6 +84,7 @@ public class TileChiseledBookshelf extends TileEntity
     public boolean isValidBook(ItemStack stack)
     {
         if (ConfigCache.bookshelfAcceptedBooks.isEmpty()) return false;
+        if (ConfigParser.hasWhitelistedName(stack, ConfigCache.bookshelfAcceptedNames)) return true;
         return ConfigParser.isStackInList(stack, ConfigCache.bookshelfAcceptedBooks);
     }
 

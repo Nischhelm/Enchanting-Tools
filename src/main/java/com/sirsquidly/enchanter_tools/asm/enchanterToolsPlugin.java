@@ -1,5 +1,6 @@
 package com.sirsquidly.enchanter_tools.asm;
 
+import com.sirsquidly.enchanter_tools.enchanterTools;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.GlobalProperties;
 import org.spongepowered.asm.launch.MixinBootstrap;
@@ -29,7 +30,7 @@ public class enchanterToolsPlugin implements IFMLLoadingPlugin
             MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
         }
         catch (Throwable t)
-        { t.printStackTrace(); }
+        { enchanterTools.LOGGER.fatal(t); }
     }
 
     @Override

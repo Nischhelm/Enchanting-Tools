@@ -1,7 +1,9 @@
 package com.sirsquidly.enchanter_tools.common;
 
+import com.sirsquidly.enchanter_tools.common.blocks.BlockArcaneBrazier;
 import com.sirsquidly.enchanter_tools.common.blocks.tileentity.TileArcaneBrazier;
 import com.sirsquidly.enchanter_tools.common.items.ItemLapisRune;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Items;
@@ -79,7 +81,6 @@ public final class RuneEnchantmentLogic
         return allowed;
     }
 
-    @Nullable
     public static Set<ResourceLocation> getBrazierBlockedEnchants(World world, BlockPos tablePos)
     {
         Set<ResourceLocation> blocked = new HashSet<>();
@@ -108,11 +109,14 @@ public final class RuneEnchantmentLogic
 
     private static void getBrazierEnchantment(World world, BlockPos pos, Set<ResourceLocation> blocked)
     {
+        IBlockState state = world.getBlockState(pos);
         TileEntity te = world.getTileEntity(pos);
-        if (!(te instanceof TileArcaneBrazier)) return;
-
-        Enchantment ench = ((TileArcaneBrazier) te).getSavedEnchantment();
-        if (ench == null || ench.getRegistryName() == null) return;
-        blocked.add(ench.getRegistryName());
+        if (state.getBlock() instanceof BlockArcaneBrazier && te instanceof TileArcaneBrazier)
+        {
+            Enchantment ench = ((TileArcaneBrazier) te).getSavedEnchantment();
+            if (state.getValue(BlockArcaneBrazier.FLAME) != 2 || ench == null || ench.getRegistryName() == null)
+                return;
+            blocked.add(ench.getRegistryName());
+        }
     }
 }

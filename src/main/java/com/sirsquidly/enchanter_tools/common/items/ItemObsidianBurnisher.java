@@ -1,12 +1,11 @@
 package com.sirsquidly.enchanter_tools.common.items;
 
 import com.sirsquidly.enchanter_tools.common.CommonEvents;
-import com.sirsquidly.enchanter_tools.config.ConfigCache;
+import com.sirsquidly.enchanter_tools.config.Config;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerRepair;
-import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -30,18 +29,20 @@ public class ItemObsidianBurnisher extends Item implements IAnvilSpecialBehavior
     public void onAnvilUpdate(AnvilUpdateEvent event, ItemStack left, ItemStack right)
     {
         int leftRepairCost = left.getRepairCost();
+        double durabilityCost = Config.item.obsidianBurnisher.durabilityCost;
 
         if (leftRepairCost <= 0) return;
-        if (left.getMaxDamage() - left.getItemDamage() < (int)(left.getMaxDamage() * ConfigCache.burnisherDurabilityCost)) return;
+        if (left.getMaxDamage() - left.getItemDamage() < (int)(left.getMaxDamage() * durabilityCost)) return;
         ItemStack newLeft = left.copy();
 
         /* Damages the item after repairing it. */
-        if (left.isItemStackDamageable()) newLeft.setItemDamage((int) Math.max(0, left.getItemDamage() + (left.getMaxDamage() * ConfigCache.burnisherDurabilityCost)));
+        if (left.isItemStackDamageable()) newLeft.setItemDamage((int) Math.max(0, left.getItemDamage() + (left.getMaxDamage() * durabilityCost)));
 
         /* This is used for lowering Repair Cost using an inverse of the formula used to increase it. */
-        if (ConfigCache.burnisherRepairCost < 0)
+        int repairCost = Config.item.obsidianBurnisher.repairCostAltering;
+        if (repairCost < 0)
         {
-            for (int i = 0; i < -ConfigCache.burnisherRepairCost && leftRepairCost > 0; i++)
+            for (int i = 0; i < -repairCost && leftRepairCost > 0; i++)
             {
                 leftRepairCost = (leftRepairCost - 1) / 2;
             }
@@ -63,6 +64,6 @@ public class ItemObsidianBurnisher extends Item implements IAnvilSpecialBehavior
         tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.label"));
         tooltip.add(TextFormatting.GRAY + I18n.format(""));
         tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.effect"));
-        tooltip.add(TextFormatting.BLUE + I18n.format("description.enchanter_tools.obsidian_burnisher.stats", ConfigCache.burnisherRepairCost));
+        tooltip.add(TextFormatting.BLUE + I18n.format("description.enchanter_tools.obsidian_burnisher.stats", Config.item.obsidianBurnisher.repairCostAltering));
     }
 }
