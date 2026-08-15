@@ -1,6 +1,6 @@
 package com.sirsquidly.enchanter_tools.common.items;
 
-import com.sirsquidly.enchanter_tools.config.ConfigCache;
+import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.init.EnchanterToolsSounds;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,14 +46,18 @@ public class ItemEnchanted8Ball extends Item
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItemDamage() > 0 || !stack.isItemEnchanted() && ConfigCache.eightBallFortunesEnchantExclusive) return new ActionResult<>(EnumActionResult.PASS, stack);
+        if (stack.getItemDamage() > 0 || !stack.isItemEnchanted() && Config.item.enchantedEightBall.enchantedDivination)
+            return new ActionResult<>(EnumActionResult.PASS, stack);
 
-        player.setActiveHand(hand);
-        player.swingArm(hand);
-        player.sendStatusMessage(new TextComponentTranslation("message.enchanter_tools.enchanted_eight_ball.use" + world.rand.nextInt(20)), true);
-        player.getCooldownTracker().setCooldown(stack.getItem(), 3);
-        world.playSound(null, player.getPosition(), EnchanterToolsSounds.ITEM_ENCHANTED_EIGHT_BALL_USE, SoundCategory.BLOCKS, 0.5F, 1.0F);
-
+        if(!world.isRemote)
+        {
+            player.sendStatusMessage(new TextComponentTranslation("message.enchanter_tools.enchanted_eight_ball.use" + world.rand.nextInt(20)), true);
+            player.getCooldownTracker().setCooldown(stack.getItem(), 10);
+        }
+        else
+        {
+            world.playSound(player, player.getPosition(), EnchanterToolsSounds.ITEM_ENCHANTED_EIGHT_BALL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        }
 
         return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }

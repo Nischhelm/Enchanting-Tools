@@ -85,9 +85,9 @@ public class ItemEnchantedInkwell extends Item implements IAnvilSpecialBehavior
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
         tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.label"));
-        tooltip.add(TextFormatting.GRAY + I18n.format(""));
+        tooltip.add("");
         tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.anvil_ingredient.applies"));
         tooltip.add(TextFormatting.BLUE + I18n.format("description.enchanter_tools.anvil_ingredient.books"));
-        tooltip.add(TextFormatting.GRAY + I18n.format(""));
+        if(stack.isItemEnchanted()) tooltip.add("");
     }
 }

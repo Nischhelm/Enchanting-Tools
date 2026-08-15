@@ -1,6 +1,5 @@
 package com.sirsquidly.enchanter_tools.config;
 
-import com.google.common.collect.Lists;
 import com.sirsquidly.enchanter_tools.enchanterTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -14,7 +13,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.GameData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 	This is to break part arrays in the config for use in other areas of the code.
@@ -23,32 +24,45 @@ import java.util.List;
  */
 public class ConfigParser
 {
-	/** Nightmare spawn biomes list. */
-	public static List<ItemStack> veilingTreatItems = Lists.newArrayList();
-	public static List<Integer> veilingTreatHappiness = Lists.newArrayList();
-
 	/** Goes through the many Arrays in the config, to translate them into lists to be used elsewhere. */
 	public static void breakupConfigArrays()
 	{
+		//Resetting all config caches
+		ConfigCache.bookshelfAcceptedBooks.clear();
+		ConfigCache.bookshelfAcceptedNames.clear();
+		ConfigCache.brazierBurnEnchantBlacklist.clear();
+		ConfigCache.brazierBurnItemBlacklist.clear();
+		ConfigCache.extractBookExtractEnchantBlacklist.clear();
+		ConfigCache.extractBookExtractItemBlacklist.clear();
+		ConfigCache.eightBallInjectChances.clear();
+		ConfigCache.eightBallInjectLootTables.clear();
+		ConfigCache.inkwellInjectChances.clear();
+		ConfigCache.inkwellInjectLootTables.clear();
+		ConfigCache.comprehensionEntityBlacklist.clear();
+
+		//Chiseled Bookshelf
 		for(String S : Config.block.chiseledBookshelf.acceptedBooks)
 		{
 			ItemStack book = getItemStackFromString(S);
 
 			if (book == ItemStack.EMPTY)
 			{
-				enchanterTools.LOGGER.error(S + " was not found, skipping...");
+                enchanterTools.LOGGER.error("Chiseled Bookshelf accepted book {} was not found, skipping...", S);
 				continue;
 			}
 
 			ConfigCache.bookshelfAcceptedBooks.add(book);
 		}
+		ConfigCache.bookshelfAcceptedNames.addAll(Arrays.asList(Config.block.chiseledBookshelf.acceptedNames));
+
+		//Arcane Brazier
 		for(String S : Config.block.arcaneBrazier.burningEnchantBlacklist)
 		{
 			Enchantment enchant = getEnchantmentFromString(S);
 
 			if (enchant == null)
 			{
-				enchanterTools.LOGGER.error(S + " was not found, skipping...");
+                enchanterTools.LOGGER.error("Chiseled Bookshelf blacklisted enchant {} was not found, skipping...", S);
 				continue;
 			}
 			ConfigCache.brazierBurnEnchantBlacklist.add(S);
@@ -59,7 +73,7 @@ public class ConfigParser
 
 			if (stack == null)
 			{
-				enchanterTools.LOGGER.error(S + " was not found, skipping...");
+                enchanterTools.LOGGER.error("Arcane Brazier blacklisted item {} was not found, skipping...", S);
 				continue;
 			}
 			ConfigCache.brazierBurnItemBlacklist.add(stack);
@@ -71,7 +85,7 @@ public class ConfigParser
 
 			if (enchant == null)
 			{
-				enchanterTools.LOGGER.error(S + " was not found, skipping...");
+                enchanterTools.LOGGER.error("Extracting Book blacklisted enchant {} was not found, skipping...", S);
 				continue;
 			}
 			ConfigCache.extractBookExtractEnchantBlacklist.add(S);
@@ -82,7 +96,7 @@ public class ConfigParser
 
 			if (stack == null)
 			{
-				enchanterTools.LOGGER.error(S + " was not found, skipping...");
+                enchanterTools.LOGGER.error("Extracting Book blacklisted item {} was not found, skipping...", S);
 				continue;
 			}
 
@@ -94,7 +108,7 @@ public class ConfigParser
 
 			if (split.length != 2)
 			{
-				enchanterTools.LOGGER.error(S + " is improperly written! Did you use a '=' properly?");
+                enchanterTools.LOGGER.error("Enchanted 8 Ball loot table entry {} is improperly written! Did you use a '=' properly?", S);
 				continue;
 			}
 
@@ -108,7 +122,7 @@ public class ConfigParser
 
 			if (split.length != 2)
 			{
-				enchanterTools.LOGGER.error(S + " is improperly written! Did you use a '=' properly?");
+                enchanterTools.LOGGER.error("Enchanted Inkwell loot table entry {} is improperly written! Did you use a '=' properly?", S);
 				continue;
 			}
 
@@ -121,7 +135,7 @@ public class ConfigParser
 			ResourceLocation entityResourceloc = getEntityFromString(S);
 			if (entityResourceloc == null)
 			{
-				enchanterTools.LOGGER.error(S + " is returning null, is the entity ID written properly/does it exist? Skipping...");
+                enchanterTools.LOGGER.error("Comprehension effect entity {} is returning null, is the entity ID written properly/does it exist? Skipping...", S);
 				continue;
 			}
 			ConfigCache.comprehensionEntityBlacklist.add(entityResourceloc);
@@ -135,6 +149,20 @@ public class ConfigParser
             if (configStack.getItem() == input.getItem() && (configStack.getMetadata() == OreDictionary.WILDCARD_VALUE || configStack.getMetadata() == input.getMetadata()))
 			{ return true; }
         }
+		return false;
+	}
+
+	public static boolean hasWhitelistedName(ItemStack stack, Set<String> validNames)
+	{
+		if (stack.isEmpty() || stack.getItem().getRegistryName() == null) return false;
+		//Blocks cannot be stored in the bookshelf unless specifically whitelisted
+		if (Block.getBlockFromItem(stack.getItem()) != Blocks.AIR) return false;
+		String itemId = stack.getItem().getRegistryName().getPath();
+		for (String name : validNames)
+		{
+			if(itemId.contains(name))
+			{ return true; }
+		}
 		return false;
 	}
 

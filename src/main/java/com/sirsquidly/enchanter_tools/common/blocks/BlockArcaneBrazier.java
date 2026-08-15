@@ -2,6 +2,7 @@ package com.sirsquidly.enchanter_tools.common.blocks;
 
 import com.sirsquidly.enchanter_tools.client.particle.enchanterToolsParticles;
 import com.sirsquidly.enchanter_tools.common.blocks.tileentity.TileArcaneBrazier;
+import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.config.ConfigCache;
 import com.sirsquidly.enchanter_tools.config.ConfigParser;
 import com.sirsquidly.enchanter_tools.enchanterTools;
@@ -20,8 +21,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemFlintAndSteel;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
@@ -33,6 +34,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
@@ -66,101 +68,127 @@ public class BlockArcaneBrazier extends Block implements ITileEntityProvider
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if (hand != EnumHand.MAIN_HAND) return true;
-
-        player.swingArm(hand);
-        TileEntity te = world.getTileEntity(pos);
-
-        if (world.isRemote) return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-
-        if (te instanceof TileArcaneBrazier)
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileArcaneBrazier)
         {
-            TileArcaneBrazier brazier = ((TileArcaneBrazier) te);
-            ItemStack held = player.getHeldItemMainhand();
-            if (held.isEmpty()) super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
+            TileArcaneBrazier brazier = (TileArcaneBrazier) tile;
+            ItemStack heldStack = player.getHeldItem(hand);
 
-            int flameState = state.getValue(FLAME);
-
-            if (flameState == 0)
+            //Lighting the Brazier or reverting the flame to normal
+            if(heldStack.getItem() instanceof ItemFlintAndSteel)
             {
-                if (held.getItem() instanceof ItemFlintAndSteel)
-                {
-                    world.setBlockState(pos, state.withProperty(FLAME, 1));
-                    return true;
-                }
+                return onFlintAndSteelInteraction(world, pos, state, brazier, player, heldStack);
             }
-            else
+
+            //Burning an enchanted book
+            if(!heldStack.isEmpty() && heldStack.getItem() instanceof ItemEnchantedBook)
             {
-                /* Early exit if the config states the Brazier should leave this item alone. */
-                if (ConfigParser.isStackInList(held, ConfigCache.brazierBurnItemBlacklist)) return false;
+                return onEnchantedBookInteraction(world, pos, state, brazier, heldStack);
+            }
 
-                if (held.getItem() == Items.ENCHANTED_BOOK)
-                {
-                    Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(held);
-                    if (enchants.isEmpty()) return true;
+            //Burning the enchantments off an item
+            if(!player.isSneaking() && !heldStack.isEmpty() && heldStack.isItemEnchanted() && brazier.getSavedEnchantment() != null)
+            {
+                //Denying blacklisted items
+                if(!ConfigParser.isStackInList(heldStack, ConfigCache.brazierBurnItemBlacklist))
+                    return onEnchantedItemInteraction(world, pos, player, heldStack, brazier.getSavedEnchantment());
+            }
 
-                    LinkedHashMap<Enchantment, Integer> newMap = new LinkedHashMap<>(enchants);
-                    Enchantment firstAllowedEnchant = null;
-
-                    for (Enchantment ench : newMap.keySet())
-                    {
-                        ResourceLocation enchId = ench.getRegistryName();
-
-                        if (enchId == null || ConfigCache.brazierBurnEnchantBlacklist.contains(enchId.toString())) continue;
-                        firstAllowedEnchant = ench;
-                    }
-                    if (firstAllowedEnchant == null) return true;
-                    brazier.setEnchantment(firstAllowedEnchant);
-
-                    held.shrink(1);
-
-                    if (state.getValue(FLAME) == 1) world.setBlockState(pos, state.withProperty(FLAME, 2));
-                    preformEnchantmentBurnEffects(world, pos);
-
-                    brazier.markDirty();
-                    world.notifyBlockUpdate(pos, state, state, 3);
-                    world.playSound(null, pos, EnchanterToolsSounds.BLOCK_ARCANE_BRAZIER_STRIP_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-                    System.out.println("Updated saved enchantment:  " + brazier.getSavedEnchantment());
-                    return true;
-                }
-                /* Enchantment Removal */
-                else if (brazier.getSavedEnchantment() != null)
-                {
-                    System.out.println("NOT NULL, CONTINUE ITEM CHECK");
-                    Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(held);
-                    if (enchants.containsKey(brazier.getSavedEnchantment()))
-                    {
-                        System.out.println(">> Enchantment found: " + brazier.getSavedEnchantment());
-                        enchants.remove(brazier.getSavedEnchantment());
-
-                        /* This is written this way in-case some mod adds an enchantable stackable item. */
-                        ItemStack output = held.copy();
-                        output.setCount(1);
-                        output.damageItem((int) (output.getMaxDamage() * ConfigCache.brazierDurabilityCost),player);
-                        EnchantmentHelper.setEnchantments(enchants, output);
-                        held.shrink(1);
-                        if (!player.inventory.addItemStackToInventory(output)) player.dropItem(output, false);
-
-                        world.playSound(null, pos, EnchanterToolsSounds.BLOCK_ARCANE_BRAZIER_STRIP_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-                        preformEnchantmentBurnEffects(world, pos);
-
-                        return true;
-                    }
-                }
-
-                if (held.getItem() instanceof ItemSpade)
-                {
-                    world.setBlockState(pos, state.withProperty(FLAME, 0));
-                    brazier.setEnchantment(null);
-                    return true;
-                }
+            //Extinguishing the Brazier either with a shovel or sneak + right-clicking with an empty hand
+            if((heldStack.isEmpty() && player.isSneaking()) || isShovel(heldStack))
+            {
+                return onExtinguishInteraction(world, pos, state, brazier, player, heldStack);
             }
         }
-        return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
+        return false;
     }
 
+    public boolean onFlintAndSteelInteraction(World world, BlockPos pos, IBlockState state, TileArcaneBrazier brazier, EntityPlayer player, ItemStack stack)
+    {
+        world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, world.rand.nextFloat() * 0.4F + 0.8F);
+        stack.damageItem(1, player);
+
+        if(state.getValue(FLAME) == 0 && brazier.getSavedEnchantment() != null)
+        {
+            //Interacting with an unlit brazier with a saved enchantment relights the purple flame
+            world.setBlockState(pos, state.withProperty(FLAME, 2));
+        }
+        else
+        {
+            //Interacting with a lit Arcane Brazier with Flint and Steel resets the flame to normal and removes the saved enchantment
+            world.setBlockState(pos, state.withProperty(FLAME, 1));
+            brazier.setEnchantment(null);
+        }
+        return true;
+    }
+
+    public boolean onExtinguishInteraction(World world, BlockPos pos, IBlockState state, TileArcaneBrazier brazier, EntityPlayer player, ItemStack stack)
+    {
+        if (state.getValue(FLAME) != 0) {
+            world.playSound(player, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5f, world.rand.nextFloat() * 0.4F + 0.8F);
+            world.setBlockState(pos, state.withProperty(FLAME, 0));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onEnchantedBookInteraction(World world, BlockPos pos, IBlockState state, TileArcaneBrazier brazier, ItemStack stack)
+    {
+        int flame = state.getValue(FLAME);
+        if (flame == 0) return false;
+
+        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
+        if (enchants.isEmpty()) return false;
+
+        LinkedHashMap<Enchantment, Integer> newMap = new LinkedHashMap<>(enchants);
+        Enchantment firstAllowedEnchant = null;
+
+        for (Enchantment ench : newMap.keySet())
+        {
+            ResourceLocation enchId = ench.getRegistryName();
+
+            if (enchId == null || ConfigCache.brazierBurnEnchantBlacklist.contains(enchId.toString())) continue;
+            firstAllowedEnchant = ench;
+        }
+
+        if (firstAllowedEnchant != null) {
+            if (flame == 1) world.setBlockState(pos, state.withProperty(FLAME, 2));
+
+            stack.shrink(1);
+            brazier.setEnchantment(firstAllowedEnchant);
+            world.playSound(null, pos, EnchanterToolsSounds.BLOCK_ARCANE_BRAZIER_STRIP_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            preformEnchantmentBurnEffects(world, pos);
+            enchanterTools.LOGGER.debug("Updated saved enchantment:  {}", brazier.getSavedEnchantment());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onEnchantedItemInteraction(World world, BlockPos pos, EntityPlayer player, ItemStack stack, Enchantment savedEnchant)
+    {
+        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
+        if (enchants.containsKey(savedEnchant))
+        {
+            if (!world.isRemote) {
+                enchanterTools.LOGGER.debug(">> Enchantment found: {}", savedEnchant);
+                enchants.remove(savedEnchant);
+
+                /* This is written this way in-case some mod adds an enchantable stackable item. */
+                ItemStack output = stack.splitStack(1);
+                output.damageItem((int) (output.getMaxDamage() * Config.block.arcaneBrazier.durabilityCost), player);
+                EnchantmentHelper.setEnchantments(enchants, output);
+                ItemHandlerHelper.giveItemToPlayer(player, output, player.inventory.currentItem);
+                world.playSound(null, pos, EnchanterToolsSounds.BLOCK_ARCANE_BRAZIER_STRIP_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                preformEnchantmentBurnEffects(world, pos);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isShovel(ItemStack stack) {
+        return !stack.isEmpty() && (stack.getItem() instanceof ItemSpade || stack.getItem().getToolClasses(stack).contains("shovel"));
+    }
 
     public static void preformEnchantmentBurnEffects(World world, BlockPos pos)
     {
@@ -176,22 +204,20 @@ public class BlockArcaneBrazier extends Block implements ITileEntityProvider
         }
     }
 
-
-    public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
+    @Override
+    public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
-        if (true)
-        {
-            super.onEntityWalk(worldIn, pos, entityIn);
-            return;
-        }
+        if (!Config.block.arcaneBrazier.collisionDamage) return;
+        if (worldIn.isRemote) return;
+        if (worldIn.getTotalWorldTime() % 20L != 0) return;
+        if (entityIn instanceof EntityPlayer && ((EntityPlayer) entityIn).isCreative()) return;
 
-        if (entityIn instanceof EntityLivingBase && worldIn.getWorldTime() % 20 == 0)
-        {
-            worldIn.playSound(null, pos, SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 0.5F, (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.2F + 1.0F);
-            entityIn.attackEntityFrom(DamageSource.MAGIC, 1.0F);
-        }
+        int flame = state.getValue(FLAME);
+        if(flame == 0) return;
 
-        super.onEntityWalk(worldIn, pos, entityIn);
+        worldIn.playSound(null, pos, SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 0.5F, (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.2F + 1.0F);
+        //Deal fire damage for normal flame, magic damage for arcane flame
+        entityIn.attackEntityFrom(flame == 1 ? DamageSource.IN_FIRE : DamageSource.MAGIC, 1.0f);
     }
 
     @SideOnly(Side.CLIENT)

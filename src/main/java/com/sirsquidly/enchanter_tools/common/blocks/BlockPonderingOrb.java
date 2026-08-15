@@ -1,7 +1,7 @@
 package com.sirsquidly.enchanter_tools.common.blocks;
 
 import com.sirsquidly.enchanter_tools.common.blocks.tileentity.TilePonderingOrb;
-import com.sirsquidly.enchanter_tools.config.ConfigCache;
+import com.sirsquidly.enchanter_tools.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -46,36 +46,37 @@ public class BlockPonderingOrb extends Block implements ITileEntityProvider
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if (hand != EnumHand.MAIN_HAND) return true;
-
-        player.swingArm(hand);
-        TileEntity te = world.getTileEntity(pos);
-        if(!world.isRemote)
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TilePonderingOrb && hand == EnumHand.MAIN_HAND)
         {
+            TilePonderingOrb orb = (TilePonderingOrb) tile;
             long time = world.getTotalWorldTime();
-
-            if (te instanceof TilePonderingOrb)
+            int xpCost = Config.block.ponderingOrb.orbRerollXPCost;
+            if (time <= orb.lastInteractTime)
             {
-                TilePonderingOrb orb = ((TilePonderingOrb) te);
-                if (player.getHeldItemMainhand().isEmpty() && time > orb.lastInteractTime)
-                {
-                    if (player.experienceTotal >= ConfigCache.ponderingOrbRerollCost)
-                    {
-                        player.onEnchant(ItemStack.EMPTY, ConfigCache.ponderingOrbRerollCost);
-
-                        world.playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.4F, world.rand.nextFloat() * 0.8F + 0.3F);
-                        player.sendStatusMessage(new TextComponentTranslation("message.enchanter_tools.pondering_orb.reroll"), true);
-                        orb.lastInteractTime = time + ConfigCache.ponderingOrbRecollCooldown;
-                        return true;
-                    }
-                    else
-                    { player.sendStatusMessage(new TextComponentTranslation("message.enchanter_tools.pondering_orb.warn_cost"), true); }
-                }
-                else
-                { player.sendStatusMessage(new TextComponentTranslation("message.enchanter_tools.pondering_orb.warn_cooldown"), true); }
+                sendPlayerMessage(player, "warn_cooldown");
+                return false;
             }
+            else if (player.experienceLevel < xpCost && !player.isCreative())
+            {
+                sendPlayerMessage(player, "warn_cost");
+                return false;
+            }
+
+            if(world.isRemote)
+                world.playSound(player, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.4F, world.rand.nextFloat() * 0.4F + 0.8F);
+            player.onEnchant(ItemStack.EMPTY, !player.isCreative() ? xpCost : 0);
+            orb.lastInteractTime = time + Config.block.ponderingOrb.orbRerollTickCooldown;
+            sendPlayerMessage(player, "reroll");
+            return true;
         }
-        return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
+        return false;
+    }
+
+    public void sendPlayerMessage(EntityPlayer player, String messageType)
+    {
+        if(player.world.isRemote) return;
+        player.sendStatusMessage(new TextComponentTranslation("message.enchanter_tools.pondering_orb." + messageType), true);
     }
 
     public boolean isOpaqueCube(IBlockState state) { return false; }

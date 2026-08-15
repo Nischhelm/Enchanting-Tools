@@ -20,6 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
@@ -68,13 +69,12 @@ public class BlockChiseledBookshelf extends BlockContainer
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         if(facing != state.getValue(FACING)) return false;
-
         if(worldIn.isRemote) return true;
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (!(tile instanceof TileChiseledBookshelf)) return false;
 
-        TileChiseledBookshelf tileBookshelf = (TileChiseledBookshelf)worldIn.getTileEntity(pos);
-
+        TileChiseledBookshelf tileBookshelf = (TileChiseledBookshelf) tile;
         ItemStack held = playerIn.getHeldItem(hand);
-
         int slot = TileChiseledBookshelf.getSlotFromHit(state.getValue(FACING), hitX, hitY, hitZ);
 
         ItemStack getSlotContents = tileBookshelf.inventory.getStackInSlot(slot);
@@ -94,7 +94,7 @@ public class BlockChiseledBookshelf extends BlockContainer
         }
         else
         {
-            playerIn.addItemStackToInventory(getSlotContents.copy());
+            ItemHandlerHelper.giveItemToPlayer(playerIn, getSlotContents.copy(), playerIn.inventory.currentItem);
             tileBookshelf.inventory.setStackInSlot(slot, ItemStack.EMPTY);
 
             return true;

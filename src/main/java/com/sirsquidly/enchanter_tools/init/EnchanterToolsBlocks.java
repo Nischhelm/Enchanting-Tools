@@ -3,10 +3,9 @@ package com.sirsquidly.enchanter_tools.init;
 import com.sirsquidly.enchanter_tools.common.blocks.BlockArcaneBrazier;
 import com.sirsquidly.enchanter_tools.common.blocks.BlockChiseledBookshelf;
 import com.sirsquidly.enchanter_tools.common.blocks.BlockPonderingOrb;
-import com.sirsquidly.enchanter_tools.config.ConfigCache;
+import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.enchanterTools;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -43,9 +42,9 @@ public class EnchanterToolsBlocks
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event)
     {
-        if (ConfigCache.brazierEnable) blockReadyForRegister(ARCANE_BRAZIER, "arcane_brazier");
-        if (ConfigCache.bookshelfEnable) blockReadyForRegister(CHISELED_BOOKSHELF, "chiseled_bookshelf");
-        if (ConfigCache.ponderingOrbEnable) blockReadyForRegister(PONDERING_ORB, "pondering_orb");
+        if (Config.block.arcaneBrazier.enable) blockReadyForRegister(ARCANE_BRAZIER, "arcane_brazier");
+        if (Config.block.chiseledBookshelf.enable) blockReadyForRegister(CHISELED_BOOKSHELF, "chiseled_bookshelf");
+        if (Config.block.ponderingOrb.enable) blockReadyForRegister(PONDERING_ORB, "pondering_orb");
 
         for (Block blocks : blockList) event.getRegistry().register(blocks);
     }

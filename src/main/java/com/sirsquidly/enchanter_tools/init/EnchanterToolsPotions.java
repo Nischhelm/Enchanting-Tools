@@ -1,7 +1,7 @@
 package com.sirsquidly.enchanter_tools.init;
 
 import com.sirsquidly.enchanter_tools.common.PotionComprehension;
-import com.sirsquidly.enchanter_tools.config.ConfigCache;
+import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.enchanterTools;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.event.RegistryEvent;
@@ -16,6 +16,6 @@ public class EnchanterToolsPotions
     @SubscribeEvent
     public static void onPotionEffectRegister(RegistryEvent.Register<Potion> event)
     {
-        if (ConfigCache.comprehensionEnable) event.getRegistry().register(COMPREHENSION);
+        if (Config.potionEffects.comprehension.enable) event.getRegistry().register(COMPREHENSION);
     }
 }

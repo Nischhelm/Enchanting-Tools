@@ -1,6 +1,7 @@
 package com.sirsquidly.enchanter_tools.common;
 
 import com.sirsquidly.enchanter_tools.common.items.IAnvilSpecialBehavior;
+import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.config.ConfigCache;
 import com.sirsquidly.enchanter_tools.init.EnchanterToolsItems;
 import com.sirsquidly.enchanter_tools.init.EnchanterToolsPotions;
@@ -135,7 +136,7 @@ public class CommonEvents
         if (!(event.getEntity() instanceof EntityExpBottle)) return;
         if (event.getEntity().getEntityWorld().isRemote) return;
 
-        int duration = ConfigCache.comprehensionXPBottleTime;
+        int duration = Config.potionEffects.comprehension.grantedByBottleOEnchanting;
         if (duration <= 0) return;
 
         BlockPos landPos = event.getRayTraceResult().getBlockPos();
@@ -158,22 +159,18 @@ public class CommonEvents
         }
     }
 
-
-
-
-
     @SubscribeEvent
     public static void onLootLoad(LootTableLoadEvent event)
     {
         ResourceLocation tableName = event.getName();
 
-        if (ConfigCache.eightBallEnable && ConfigCache.eightBallInjectLootTables.contains(tableName))
+        if (Config.item.enchantedEightBall.enable && ConfigCache.eightBallInjectLootTables.contains(tableName))
         {
             injectPool(event.getTable(), ConfigCache.eightBallInjectChances.get(ConfigCache.eightBallInjectLootTables.indexOf(tableName)),
                     "enchanted_eight_ball_pool", createLootEntry("enchanted_eight_ball_entry", EnchanterToolsItems.ENCHANTED_EIGHT_BALL, CommonEvents::createEnchantedEightBall));
         }
 
-        if (ConfigCache.inkwellEnable && ConfigCache.inkwellInjectLootTables.contains(tableName))
+        if (Config.item.inkwell.enable && ConfigCache.inkwellInjectLootTables.contains(tableName))
         {
             injectPool(event.getTable(), ConfigCache.inkwellInjectChances.get(ConfigCache.inkwellInjectLootTables.indexOf(tableName)),
                     "enchanted_inkwell_ball_pool", createLootEntry("enchanted_inkwell_ball_entry", EnchanterToolsItems.ENCHANTED_INKWELL, CommonEvents::createEnchantedInkwell));

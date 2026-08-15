@@ -1,7 +1,7 @@
 package com.sirsquidly.enchanter_tools.init;
 
 import com.sirsquidly.enchanter_tools.common.items.*;
-import com.sirsquidly.enchanter_tools.config.ConfigCache;
+import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.enchanterTools;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -32,10 +32,10 @@ public class EnchanterToolsItems
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event)
     {
-        if (ConfigCache.extractBookEnable) itemReadyForRegister(EXTRACTING_BOOK, "extracting_book");
-        if (ConfigCache.eightBallEnable) itemReadyForRegister(ENCHANTED_EIGHT_BALL, "enchanted_eight_ball");
-        if (ConfigCache.inkwellEnable) itemReadyForRegister(ENCHANTED_INKWELL, "enchanted_inkwell");
-        if (ConfigCache.burnisherEnable) itemReadyForRegister(OBSIDIAN_BURNISHER, "obsidian_burnisher");
+        if (Config.item.extractingBook.enable) itemReadyForRegister(EXTRACTING_BOOK, "extracting_book");
+        if (Config.item.enchantedEightBall.enable) itemReadyForRegister(ENCHANTED_EIGHT_BALL, "enchanted_eight_ball");
+        if (Config.item.inkwell.enable) itemReadyForRegister(ENCHANTED_INKWELL, "enchanted_inkwell");
+        if (Config.item.obsidianBurnisher.enable) itemReadyForRegister(OBSIDIAN_BURNISHER, "obsidian_burnisher");
 
         ItemLapisRune.RuneType.readFromConfig();
         ItemLapisRune.RuneType.getAll().forEach(type ->

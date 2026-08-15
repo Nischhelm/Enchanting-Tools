@@ -1,5 +1,6 @@
 package com.sirsquidly.enchanter_tools.common;
 
+import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.config.ConfigCache;
 import com.sirsquidly.enchanter_tools.enchanterTools;
 import com.sirsquidly.enchanter_tools.init.EnchanterToolsPotions;
@@ -52,7 +53,7 @@ public class PotionComprehension extends Potion
 
         /* A few filters to remove the effect. */
         if (event.getDroppedExperience() <= 0) entity.removePotionEffect(EnchanterToolsPotions.COMPREHENSION);
-        if (ConfigCache.comprehensionBlacklistBosses && !entity.isNonBoss()) entity.removePotionEffect(EnchanterToolsPotions.COMPREHENSION);
+        if (Config.potionEffects.comprehension.bossesAreBlacklisted && !entity.isNonBoss()) entity.removePotionEffect(EnchanterToolsPotions.COMPREHENSION);
         if (ConfigCache.comprehensionEntityBlacklist.contains(EntityList.getKey(entity))) entity.removePotionEffect(EnchanterToolsPotions.COMPREHENSION);
 
         if (!entity.isPotionActive(EnchanterToolsPotions.COMPREHENSION)) return;
