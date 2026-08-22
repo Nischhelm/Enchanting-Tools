@@ -77,7 +77,8 @@ public class ItemExtractingBook extends Item implements IAnvilSpecialBehavior
     {
         /* Early exit if the config states the Extracting Book should leave this item alone. */
         if (ConfigParser.isStackInList(left, ConfigCache.extractBookExtractItemBlacklist)) return null;
-
+        ItemStack extractingBook = right.copy();
+        extractingBook.shrink(1);
 
         Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(left);
         if (enchants.isEmpty()) return null;
@@ -100,7 +101,7 @@ public class ItemExtractingBook extends Item implements IAnvilSpecialBehavior
         ItemStack modified = left.copy();
         EnchantmentHelper.setEnchantments(newMap, modified);
 
-        return new CommonEvents.AnvilRefresherStorage(container, modified, ItemStack.EMPTY);
+        return new CommonEvents.AnvilRefresherStorage(container, modified, extractingBook);
     }
 
     @Override

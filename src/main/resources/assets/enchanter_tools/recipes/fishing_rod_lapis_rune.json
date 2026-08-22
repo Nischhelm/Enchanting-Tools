@@ -27,7 +27,5 @@
     }
   },
   "result":
-  {
-    "item": "enchanter_tools:fishing_rod_lapis_rune"
-  }
+  { "item": "enchanter_tools:fishing_rod_lapis_rune", "count": 3 }
 }

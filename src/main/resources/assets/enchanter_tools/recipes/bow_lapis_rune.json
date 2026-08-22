@@ -28,7 +28,5 @@
     }
   },
   "result":
-  {
-    "item": "enchanter_tools:bow_lapis_rune"
-  }
+  { "item": "enchanter_tools:bow_lapis_rune", "count": 3 }
 }
