@@ -3,6 +3,9 @@ description.enchanter_tools.anvil_ingredient.applies=Applies to:
 description.enchanter_tools.anvil_ingredient.effect=Effect:
 description.enchanter_tools.anvil_ingredient.enchanted_items=   Enchanted Items
 description.enchanter_tools.anvil_ingredient.books=   Books
+description.enchanter_tools.enchantment_table_ingredient.label=Enchantment Table Ingredient
+description.enchanter_tools.enchantment_table_ingredient.applies=Applies to:
+description.enchanter_tools.enchantment_table_ingredient.books=   Enchantable Items
 description.enchanter_tools.obsidian_burnisher.stats=   %s Anvil Uses
 description.enchanter_tools.item.obsidian_burnisher_anvil=   %s Anvil Uses
 
@@ -130,3 +133,12 @@ config.enchanter_tools.potion_effects.comprehension.enable=Enable Comprehension
 config.enchanter_tools.potion_effects.comprehension.bossesAreBlacklisted=Blacklist Boss entities
 config.enchanter_tools.potion_effects.comprehension.grantedByBottleOEnchanting=Bottle o' Enchanting Comprehension duration
 config.enchanter_tools.potion_effects.comprehension.entityBlacklist=Entity Blacklist
+
+
+
+jei.enchanter_tools.arcane_brazier.desc=Arcane Braziers burn Enchanted Books to prevent enchantments from appearing in in nearby enchanting tables. Active braziers can also burn matching enchantments off Enchanted items.
+jei.enchanter_tools.enchanted_eight_ball.desc=Enchanted 8 Balls are a treasure containing a random enchantment, and can be used for fortune-telling.
+jei.enchanter_tools.enchanted_inkwell.desc=Enchanted Inkwells copy their enchantments into Enchanted Books.
+jei.enchanter_tools.extracting_book.desc=Extracting Books extract the first enchantment from an enchanted item and transfer it into an Enchanted Book.
+jei.enchanter_tools.lapis_rune.desc=Lapis Runes influence the enchantments available in an enchanting table. Each rune favors specific enchantments or item categories.
+jei.enchanter_tools.pondering_orb.desc=Pondering Orbs passively grant experience to nearby players looking at it. Interacting with the orb will reroll enchanting table enchantments.

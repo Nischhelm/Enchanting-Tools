@@ -59,7 +59,7 @@ dependencies {
     implementation("io.github.kostaskougios:cloning:${project.cloning_version}")
 
     runtimeOnly(fg.deobf("curse.maven:caliper-266824:${project.caliper_version}"))
-    runtimeOnly(fg.deobf("curse.maven:had-enough-items-557549:${project.hei_version}"))
+    implementation(fg.deobf("curse.maven:had-enough-items-557549:${project.hei_version}"))
 }
 
 mixin {

@@ -12,6 +12,8 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerEnchantment;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -52,9 +54,16 @@ public abstract class MixinContainerEnchantment
     private void enchantertools$fixPreview(IInventory inv, CallbackInfo ci)
     {
         ItemStack item = this.tableInventory.getStackInSlot(0);
-        if (item.isEmpty() || (item.getItem() != Items.BOOK)) return;
         ItemStack runeStack = this.tableInventory.getStackInSlot(1);
-        if (!(runeStack.getItem() instanceof ItemLapisRune)) return;
+
+        /* Flush reset values! */
+        if (item.isEmpty() || !(runeStack.getItem() instanceof ItemLapisRune))
+        {
+            this.storedRune = null;
+            Arrays.fill(this.cachedRunePools, null);
+            return;
+        }
+
         ItemLapisRune.RuneType rune = ((ItemLapisRune) runeStack.getItem()).getRuneType();
         this.storedRune = rune;
 
@@ -100,10 +109,15 @@ public abstract class MixinContainerEnchantment
 
         if (pool == null || pool.isEmpty()) return;
 
-        ItemStack result = new ItemStack(Items.ENCHANTED_BOOK);
+        boolean enchantingOnBooksCrazyStyle = mainSlot.getItem() instanceof ItemBook;
+        ItemStack result = enchantingOnBooksCrazyStyle ? new ItemStack(Items.ENCHANTED_BOOK) : mainSlot.copy();
         player.onEnchant(result, (int) (i * this.storedRune.getCostMult()));
 
-        for (EnchantmentData data : pool) { ItemEnchantedBook.addEnchantment(result, data); }
+        for (EnchantmentData data : pool)
+        {
+            if (enchantingOnBooksCrazyStyle) ItemEnchantedBook.addEnchantment(result, data);
+            else result.addEnchantment(data.enchantment, data.enchantmentLevel);
+        }
 
         this.tableInventory.setInventorySlotContents(0, result);
 
@@ -156,5 +170,43 @@ public abstract class MixinContainerEnchantment
                 return;
             }
         }
+    }
+
+    @Inject( method = "transferStackInSlot", at = @At("HEAD"), cancellable = true)
+    private void enchantertools$allowSlot2(EntityPlayer player, int index, CallbackInfoReturnable<ItemStack> cir)
+    {
+        if (index < 2)  return;
+        ContainerEnchantment container = (ContainerEnchantment)(Object)this;
+        Slot slot = container.inventorySlots.get(index);
+        if (slot == null || !slot.getHasStack()) return;
+
+        ItemStack stack = slot.getStack();
+
+        if (!(stack.getItem() instanceof ItemLapisRune)) return;
+        ItemStack original = stack.copy();
+        Slot runeSlot = container.inventorySlots.get(1);
+
+        if (!runeSlot.isItemValid(stack)) return;
+        if (!runeSlot.getHasStack())
+        {
+            runeSlot.putStack(stack.copy());
+            stack.setCount(0);
+        }
+        else
+        {
+            ItemStack existing = runeSlot.getStack();
+            if (!ItemStack.areItemsEqual(existing, stack) || !ItemStack.areItemStackTagsEqual(existing, stack)) return;
+            int amount = Math.min(stack.getCount(), runeSlot.getSlotStackLimit() - existing.getCount());
+            if (amount <= 0) return;
+
+            existing.grow(amount);
+            stack.shrink(amount);
+        }
+        if (stack.isEmpty()) slot.putStack(ItemStack.EMPTY);
+        else slot.onSlotChanged();
+
+        runeSlot.onSlotChanged();
+        slot.onTake(player, stack);
+        cir.setReturnValue(original);
     }
 }

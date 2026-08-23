@@ -54,7 +54,7 @@ public final class RuneEnchantmentLogic
     }
 
     /** Generates the list of every enchantment this Rune can give. */
-    public static Set<Enchantment> buildAllowedSet(ItemLapisRune.RuneType runeType, ItemStack item, boolean treasureAllowed)
+    public static Set<Enchantment> buildAllowedSet(ItemLapisRune.RuneType runeType, ItemStack item, boolean isMimikedTreasureAllowed)
     {
         Set<Enchantment> allowed = new LinkedHashSet<>();
 
@@ -65,17 +65,23 @@ public final class RuneEnchantmentLogic
             for (Enchantment e : Enchantment.REGISTRY)
             {
                 if (e == null) continue;
-                if (!treasureAllowed && (e.isTreasureEnchantment() || e.isCurse())) continue;
+                if (!isMimikedTreasureAllowed && (e.isTreasureEnchantment() || e.isCurse())) continue;
 
                 if (e.canApplyAtEnchantingTable(mimic) && (e.canApply(item) || item.getItem() == Items.BOOK)) allowed.add(e);
             }
         }
 
         /*
-        * After item filtering, just dump and wash the lists.
-        * ...would you say 'dump and wash'??? IDK
+        * SORT the enchants so only COMPATIBLE ones are added to the item!
+        * Also, no filtering for Enchanting Table check nor treasure, the whitelist is followed exactly
         * */
-        allowed.addAll(runeType.getEnchantmentsWhitelist());
+        for (Enchantment e : runeType.getEnchantmentsWhitelist())
+        {
+            if (e == null) continue;
+            if (e.canApply(item) || item.getItem() == Items.BOOK) allowed.add(e);
+        }
+
+        /* Simply dump any blacklisted enchantments. No fancy filters needed! */
         allowed.removeAll(runeType.getEnchantmentsBlacklist());
 
         return allowed;

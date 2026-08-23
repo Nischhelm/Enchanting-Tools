@@ -4,15 +4,19 @@ import com.google.common.collect.Maps;
 import com.sirsquidly.enchanter_tools.config.Config;
 import com.sirsquidly.enchanter_tools.config.ConfigParser;
 import com.sirsquidly.enchanter_tools.enchanterTools;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class ItemLapisRune extends Item
 {
@@ -25,6 +29,16 @@ public class ItemLapisRune extends Item
     }
 
     public RuneType getRuneType() { return runeType; }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.enchantment_table_ingredient.label"));
+        tooltip.add("");
+        tooltip.add(TextFormatting.GRAY + I18n.format("description.enchanter_tools.enchantment_table_ingredient.applies"));
+        tooltip.add(TextFormatting.BLUE + I18n.format("description.enchanter_tools.enchantment_table_ingredient.books"));
+    }
 
     public static class RuneType
     {
