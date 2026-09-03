@@ -20,7 +20,7 @@ public class enchanterTools {
     public static final String CHANNEL_ID = "enchanter_tools";
     public static final String NAME = "Enchanter Tools";
     public static final String CONFIG_NAME = "enchanter_tools";
-    public static final String VERSION = "1.1.0";
+    public static final String VERSION = "1.1.1a";
     public static final String DEPENDENCIES = "";
     public static final String CLIENT_PROXY_CLASS = "com.sirsquidly.enchanter_tools.client.ClientProxy";
     public static final String COMMON_PROXY_CLASS = "com.sirsquidly.enchanter_tools.common.CommonProxy";
