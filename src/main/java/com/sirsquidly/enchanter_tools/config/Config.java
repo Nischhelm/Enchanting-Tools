@@ -215,7 +215,7 @@ public class Config
             @net.minecraftforge.common.config.Config.Comment("Loot Tables the Enchanted 8 Ball will be injected into. Non-replacing.")
             public String[] eight_ball_lootTables =
                     {
-                            "minecraft:chests/end_city_treasure0.08",
+                            "minecraft:chests/end_city_treasure=0.08",
                             "minecraft:chests/simple_dungeon=0.02",
                             "minecraft:chests/stronghold_corridor=0.02",
                             "minecraft:chests/woodland_mansion=0.069",
@@ -240,7 +240,7 @@ public class Config
             public String[] inkwell_lootTables =
                     {
                             "minecraft:chests/desert_pyramid=0.001",
-                            "minecraft:chests/end_city_treasure0.001",
+                            "minecraft:chests/end_city_treasure=0.001",
                             "minecraft:chests/jungle_temple=0.001",
                             "minecraft:chests/simple_dungeon=0.001",
                             "minecraft:chests/stronghold_corridor=0.001",
