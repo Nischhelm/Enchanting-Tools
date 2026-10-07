@@ -14,5 +14,5 @@ public class MixinEnchantmentHelper
 {
     @ModifyArg(method = "calcItemStackEnchantability", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I"))
     private static int enchantertools$preventNegativePower(int bound)
-    { return Math.max(0, bound);}
+    { return Math.max(1, bound);}
 }
